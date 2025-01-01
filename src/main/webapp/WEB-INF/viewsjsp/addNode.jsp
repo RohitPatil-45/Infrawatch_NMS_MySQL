@@ -324,6 +324,7 @@
 
 			$('[data-mask]').inputmask()
 			//Bootstrap Duallistbox
+			//test git change
 
 		})
 	</script>
