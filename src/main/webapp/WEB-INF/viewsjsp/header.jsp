@@ -66,8 +66,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								<li><a
 									href="<%=request.getContextPath()%>/dashboard/summaryPage"
 									class="dropdown-item">Home Dashboard</a></li>
-
-
+								<li class="dropdown-divider"></li>
+								<li><a
+									href="<%=request.getContextPath()%>/dashboard/ScoreDashboard"
+									class="dropdown-item">Score Dashboard</a></li>
 
 
 
@@ -127,7 +129,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									class="dropdown-item">Top Talker</a></li>
 								<%
 									}
-									
+
 									if (dashboardScope.contains("Port_Summary")) {
 								%>
 								<li class="dropdown-divider"></li>

@@ -54,6 +54,13 @@ public class DashboardController {
 		return "summary";
 	}
 
+	@RequestMapping("/ScoreDashboard")
+	public String ScoreDashboard(HttpServletRequest req, HttpServletResponse res) {
+		System.out.println("Controller Called ScoreDashboard");
+
+		return "ScoreDashboard";
+	}
+
 	/* Get Device Summary Count */
 	@RequestMapping(value = "/deviceSummaryCount", method = RequestMethod.GET)
 	public JSONArray deviceSummaryCount(ModelMap model, HttpServletRequest request, HttpServletResponse response,
@@ -1616,8 +1623,7 @@ public class DashboardController {
 			out.close();
 		}
 	}
-	
-	
+
 //	@RequestMapping(value = "/interfacespeedtest", method = RequestMethod.GET)
 //	public ModelAndView interfacespeedtest(@RequestParam("deviceIP") String deviceIP, @RequestParam("intName") String intName,
 //			HttpServletResponse response, HttpSession session,ModelAndView modelview) {
