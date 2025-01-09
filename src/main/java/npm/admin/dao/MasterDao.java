@@ -257,4 +257,6 @@ public interface MasterDao {
 	JSONArray getslamasterdata();
 
 	Map<String, String> getGroupMapScopeUser();
+
+	String addCollector(String collector, String deviceIP, String type, String port);
 }

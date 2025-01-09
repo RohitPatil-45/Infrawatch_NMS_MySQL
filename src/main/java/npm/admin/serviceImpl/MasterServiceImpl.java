@@ -1033,4 +1033,9 @@ public class MasterServiceImpl implements MasterService {
 		// TODO Auto-generated method stub
 		return dao.getslamasterdata();
 	}
+	
+	public String addCollector(String collector, String deviceIP, String type, String port) {
+		// TODO Auto-generated method stub
+		return dao.addCollector(collector, deviceIP, type, port);
+	}
 }

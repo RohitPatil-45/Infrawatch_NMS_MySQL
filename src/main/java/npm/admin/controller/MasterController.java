@@ -39,6 +39,7 @@ import npm.admin.beans.IcmpMasterBean;
 import npm.admin.beans.LocationMasterBean;
 import npm.admin.beans.MailTemplateBean;
 import npm.admin.beans.MakeModelMasterBean;
+import npm.admin.beans.NetflowSflowCollector;
 import npm.admin.beans.NwIpScanBean;
 import npm.admin.beans.PushConfigurationBean;
 import npm.admin.beans.SLAMasterBean;
@@ -1951,5 +1952,28 @@ public class MasterController {
 		} catch (Exception e) {
 			System.out.println("Exception:" + e);
 		}
+	}
+
+	// Netflow Sflow Collector
+	@RequestMapping("/collector")
+	public String collector(HttpServletRequest req, HttpServletResponse res, Model m) {
+
+		m.addAttribute("collector", new NetflowSflowCollector());
+		return "collector";
+	}
+
+	@RequestMapping(value = "/addCollector", method = RequestMethod.POST)
+	public void addCollector(@RequestParam("collector") String collector, @RequestParam("deviceIP") String deviceIP,
+			@RequestParam("type") String type, @RequestParam("port") String port, HttpServletResponse res,
+			HttpServletRequest req) {
+		try {
+			PrintWriter out = res.getWriter();
+			String result = service.addCollector(collector, deviceIP, type, port);
+			System.out.println("Status:" + result);
+			out.print(result);
+		} catch (Exception e) {
+			System.out.println("Exception:" + e);
+		}
+
 	}
 }

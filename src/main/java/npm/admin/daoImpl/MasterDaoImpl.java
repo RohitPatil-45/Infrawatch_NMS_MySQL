@@ -73,6 +73,7 @@ import npm.model.MailTemplate;
 import npm.model.MakeAndModelMasterModel;
 import npm.model.ManualTopology;
 import npm.model.NWIPScanModel;
+import npm.model.NetflowSflowCollectorModel;
 import npm.model.Network_Discovery;
 import npm.model.NodeParameterModel;
 import npm.model.PushConfigurationModel;
@@ -1575,8 +1576,7 @@ public class MasterDaoImpl extends AbstractDao<Integer, UserMasterModel> impleme
 					String groupClause = String.join("','", groupArray);
 					String locationClause = String.join("','", locationArray);
 
-					String userScopeFilter = String.format(
-							"add_node.GROUP_NAME IN ('%s')", groupClause);
+					String userScopeFilter = String.format("add_node.GROUP_NAME IN ('%s')", groupClause);
 					userSData.setUSER_SCOPE(userScopeFilter);
 					getSession().save(userSData);
 					result = "success";
@@ -2622,7 +2622,8 @@ public class MasterDaoImpl extends AbstractDao<Integer, UserMasterModel> impleme
 						nodesJSON1 = new JSONObject();
 						nodesJSON1.put("id", mac);
 						nodesJSON1.put("label", obj[0].toString() + '\n' + "(" + obj[4].toString() + ")");
-						nodesJSON1.put("title", (obj[2] != null ? obj[2].toString(): "-") + "(" + obj[1].toString() + ")");
+						nodesJSON1.put("title",
+								(obj[2] != null ? obj[2].toString() : "-") + "(" + obj[1].toString() + ")");
 						nodesJSON1.put("shape", "image");
 						nodesJSON1.put("font", "12px arial white");
 						if (obj[4].toString().equals("Router")) {
@@ -3081,6 +3082,24 @@ public class MasterDaoImpl extends AbstractDao<Integer, UserMasterModel> impleme
 			// TODO: handle exception
 		}
 		return array1;
+	}
+
+	public String addCollector(String collector, String deviceIP, String type, String port) {
+
+		String result = null;
+		try {
+			NetflowSflowCollectorModel ns = new NetflowSflowCollectorModel();
+			ns.setCOLLECTOR(collector);
+			ns.setDEVICE_IP(deviceIP);
+			ns.setTYPE(type);
+			ns.setPORT(port);
+			getSession().save(ns);
+			result = "success";
+		} catch (Exception e) {
+			System.out.println("Exception occured while adding netflow sflow collector:" + e);
+			result = "fail";
+		}
+		return result;
 	}
 
 }

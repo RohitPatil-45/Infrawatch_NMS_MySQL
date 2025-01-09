@@ -264,4 +264,6 @@ public interface MasterService {
 
 	JSONArray getslamasterdata();
 
+	String addCollector(String collector, String deviceIP, String type, String port);
+
 }
