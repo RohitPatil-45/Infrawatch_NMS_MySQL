@@ -375,16 +375,16 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 //								+ userScopeData);
 				Query q = getSession().createSQLQuery(
 						"SELECT add_node.DEVICE_IP, add_node.DEVICE_NAME, add_node.LOCATION, add_node.COMPANY, "
-						+ "CASE WHEN COUNT(CASE WHEN LOWER(im.INTERFACE_NAME) LIKE '%wan%' OR LOWER(im.INTERFACE_NAME) LIKE '%3g%' "
-						+ "OR LOWER(im.INTERFACE_NAME) LIKE '%4g%' THEN 1 END) = 0 THEN 'NA' "
-						+ "ELSE GROUP_CONCAT(CASE WHEN LOWER(im.INTERFACE_NAME) LIKE '%wan%' "
-						+ "OR LOWER(im.INTERFACE_NAME) LIKE '%3g%' OR LOWER(im.INTERFACE_NAME) LIKE '%4g%' "
-						+ "THEN CONCAT(im.INTERFACE_NAME, ' (', COALESCE(im.Interface_IP_ICMP_Status, 'NA'), ')') "
-						+ "END SEPARATOR ', ') END AS INTERFACE_NAMES,NM.NODE_STATUS "
-						+ "FROM add_node add_node JOIN node_monitoring NM ON add_node.DEVICE_IP = NM.NODE_IP "
-						+ "LEFT JOIN interface_monitoring im ON im.NODE_IP = add_node.DEVICE_IP AND im.MONITORING_PARAM = 'Yes' "
-						+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND "
-								+ userScopeData + " GROUP BY add_node.DEVICE_IP");
+								+ "CASE WHEN COUNT(CASE WHEN LOWER(im.INTERFACE_NAME) LIKE '%wan%' OR LOWER(im.INTERFACE_NAME) LIKE '%3g%' "
+								+ "OR LOWER(im.INTERFACE_NAME) LIKE '%4g%' THEN 1 END) = 0 THEN 'NA' "
+								+ "ELSE GROUP_CONCAT(CASE WHEN LOWER(im.INTERFACE_NAME) LIKE '%wan%' "
+								+ "OR LOWER(im.INTERFACE_NAME) LIKE '%3g%' OR LOWER(im.INTERFACE_NAME) LIKE '%4g%' "
+								+ "THEN CONCAT(im.INTERFACE_NAME, ' (', COALESCE(im.Interface_IP_ICMP_Status, 'NA'), ')') "
+								+ "END SEPARATOR ', ') END AS INTERFACE_NAMES,NM.NODE_STATUS "
+								+ "FROM add_node add_node JOIN node_monitoring NM ON add_node.DEVICE_IP = NM.NODE_IP "
+								+ "LEFT JOIN interface_monitoring im ON im.NODE_IP = add_node.DEVICE_IP AND im.MONITORING_PARAM = 'Yes' "
+								+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND " + userScopeData
+								+ " GROUP BY add_node.DEVICE_IP");
 				List<?> dataList = q.list();
 				array1 = new JSONArray();
 
@@ -4264,6 +4264,147 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 			// TODO: handle exception
 		}
 		return myreturn;
+	}
+
+	public JSONArray AverageCPUDataScore(String userScopeData) {
+
+		JSONArray array = null;
+		JSONArray array1 = null;
+		int srno = 0;
+		try {
+			String sql = "SELECT AVG(nodemon.CPU_UTILIZATION) AS average_cpu_utilization\r\n"
+					+ "FROM node_health_monitoring nodemon , add_node add_node \r\n"
+					+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND nodemon.NODE_IP = add_node.DEVICE_IP AND CPU_UTILIZATION IS NOT NULL AND "
+					+ userScopeData;
+
+			String db_type = environment.getRequiredProperty("DATABASE_TYPE");
+			if (db_type.equalsIgnoreCase("mysql")) {
+				sql = "SELECT AVG(nodemon.CPU_UTILIZATION) AS average_cpu_utilization\r\n"
+						+ "FROM node_health_monitoring nodemon , add_node add_node \r\n"
+						+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND nodemon.NODE_IP = add_node.DEVICE_IP AND CPU_UTILIZATION IS NOT NULL AND "
+						+ userScopeData;
+			} else if (db_type.equalsIgnoreCase("mssql")) {
+
+			} else if (db_type.equalsIgnoreCase("oracle")) {
+
+			}
+
+			SQLQuery query = getSession().createSQLQuery(sql);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+
+			List results = query.list();
+			array1 = new JSONArray();
+
+			for (Object object : results) {
+				Map row = (Map) object;
+
+				array1.put(row.get("average_cpu_utilization"));
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		System.out.println("device AverageCPUDataScore summary data =" + array1);
+		return array1;
+	}
+
+	public JSONArray AverageMemoryDataScore(String userScopeData) {
+
+		JSONArray array = null;
+		JSONArray array1 = null;
+		int srno = 0;
+		try {
+			String sql = "SELECT AVG((USED_MEMORY / TOTAL_MEMORY) * 100) AS average_used_memory_percent "
+					+ "FROM node_health_monitoring nodemon , add_node add_node \r\n"
+					+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND nodemon.NODE_IP = add_node.DEVICE_IP AND USED_MEMORY IS NOT NULL AND TOTAL_MEMORY IS NOT NULL  AND "
+					+ userScopeData;
+
+			String db_type = environment.getRequiredProperty("DATABASE_TYPE");
+			if (db_type.equalsIgnoreCase("mysql")) {
+				sql = "SELECT AVG((USED_MEMORY / TOTAL_MEMORY) * 100) AS average_used_memory_percent \r\n"
+						+ "FROM node_health_monitoring nodemon , add_node add_node \r\n"
+						+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND nodemon.NODE_IP = add_node.DEVICE_IP AND USED_MEMORY IS NOT NULL AND TOTAL_MEMORY IS NOT NULL AND "
+						+ userScopeData;
+			} else if (db_type.equalsIgnoreCase("mssql")) {
+
+			} else if (db_type.equalsIgnoreCase("oracle")) {
+
+			}
+
+			SQLQuery query = getSession().createSQLQuery(sql);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+
+			List results = query.list();
+			array1 = new JSONArray();
+
+			for (Object object : results) {
+				Map row = (Map) object;
+
+				array1.put(row.get("average_used_memory_percent"));
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		System.out.println("device AverageMemoryDataScore summary data =" + array1);
+		return array1;
+	}
+
+	public JSONArray AverageTempDataScore(String userScopeData) {
+
+		JSONArray array = null;
+		JSONArray array1 = null;
+		int srno = 0;
+		try {
+			String sql = "SELECT AVG(TEMPERATURE) AS average_used_memory_percent "
+					+ "FROM node_health_monitoring nodemon , add_node add_node \r\n"
+					+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND nodemon.NODE_IP = add_node.DEVICE_IP AND TEMPERATURE IS NOT NULL AND "
+					+ userScopeData;
+
+			String db_type = environment.getRequiredProperty("DATABASE_TYPE");
+			if (db_type.equalsIgnoreCase("mysql")) {
+				sql = "SELECT AVG(TEMPERATURE) AS average_used_memory_percent \r\n"
+						+ "FROM node_health_monitoring nodemon , add_node add_node \r\n"
+						+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND nodemon.NODE_IP = add_node.DEVICE_IP AND TEMPERATURE IS NOT NULL AND "
+						+ userScopeData;
+			} else if (db_type.equalsIgnoreCase("mssql")) {
+
+			} else if (db_type.equalsIgnoreCase("oracle")) {
+
+			}
+
+			SQLQuery query = getSession().createSQLQuery(sql);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+
+			List results = query.list();
+			array1 = new JSONArray();
+
+			for (Object object : results) {
+				Map row = (Map) object;
+
+				array1.put(row.get("average_used_memory_percent"));
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		System.out.println("device AverageTempDataScore summary data =" + array1);
+		return array1;
+	}
+
+	public JSONArray PerformanceCountsScore(String userScopeData) {
+
+		JSONArray array1 = new JSONArray();
+		
+
+		System.out.println("device AverageTempDataScore summary data =" + array1);
+		return array1;
 	}
 
 }

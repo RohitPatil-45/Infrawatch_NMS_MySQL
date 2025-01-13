@@ -1639,4 +1639,90 @@ public class DashboardController {
 //		return modelview;
 //	}
 
+//	score dashboard data
+
+	@RequestMapping(value = "/AverageCPUDataScore", method = RequestMethod.GET)
+	public JSONArray AverageCPUDataScore(ModelMap model, HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) {
+		String userScopeData = (String) session.getAttribute("userScope");
+
+		PrintWriter out = null;
+		try {
+			out = response.getWriter();
+			JSONArray jsonresponse = service.AverageCPUDataScore(userScopeData);
+			out.print(jsonresponse);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			out.close();
+		}
+
+		return null;
+	}
+
+	@RequestMapping(value = "/AverageMemoryDataScore", method = RequestMethod.GET)
+	public JSONArray AverageMemoryDataScore(ModelMap model, HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) {
+		String userScopeData = (String) session.getAttribute("userScope");
+
+		PrintWriter out = null;
+		try {
+			out = response.getWriter();
+			JSONArray jsonresponse = service.AverageMemoryDataScore(userScopeData);
+			out.print(jsonresponse);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			out.close();
+		}
+
+		return null;
+	}
+
+	@RequestMapping(value = "/AverageTempDataScore", method = RequestMethod.GET)
+	public JSONArray AverageTempDataScore(ModelMap model, HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) {
+		String userScopeData = (String) session.getAttribute("userScope");
+
+		PrintWriter out = null;
+		try {
+			out = response.getWriter();
+			JSONArray jsonresponse = service.AverageTempDataScore(userScopeData);
+			out.print(jsonresponse);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			out.close();
+		}
+
+		return null;
+	}
+
+	@RequestMapping(value = "/PerformanceCountsScore", method = RequestMethod.GET)
+	public JSONArray PerformanceCountsScore(ModelMap model, HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) {
+		String userScopeData = (String) session.getAttribute("userScope");
+
+		PrintWriter out = null;
+		try {
+			out = response.getWriter();
+			JSONArray jsonresponse = service.PerformanceCountsScore(userScopeData);
+			out.print(jsonresponse);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			out.close();
+		}
+
+		return null;
+	}
+
 }

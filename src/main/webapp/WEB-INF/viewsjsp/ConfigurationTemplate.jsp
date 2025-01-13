@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Syslog</title>
+<title>PlayBooks</title>
 <link rel="shortcut icon" type="image/x-icon"
 	href="<%=request.getContextPath()%>/webtemplate/dist/img/AdminLTELogo.png">
 <meta charset="utf-8">
@@ -89,7 +89,7 @@
 						<div class="col-sm-6">
 							<c:choose>
 								<c:when test="${userId==null}">
-									<h1>Network Troubleshooting Template</h1>
+									<h1>Network Troubleshooting PlayBooks Manage</h1>
 								</c:when>
 								<c:otherwise>
 									<h1>Edit User</h1>
@@ -102,7 +102,8 @@
 								<li class="breadcrumb-item"><a href="#">Home</a></li>
 								<c:choose>
 									<c:when test="${userId==null}">
-										<li class="breadcrumb-item active">Network Troubleshooting Template</li>
+										<li class="breadcrumb-item active">Network
+											Troubleshooting PlayBooks Manage</li>
 									</c:when>
 								</c:choose>
 								<%-- <c:choose>
@@ -132,7 +133,8 @@
 								<div class="card-header">
 									<c:choose>
 										<c:when test="${userId==null}">
-											<h3 class="card-title">Network Troubleshooting Template</h3>
+											<h3 class="card-title">Network Troubleshooting PlayBooks
+												Manage</h3>
 										</c:when>
 										<c:otherwise>
 											<h3 class="card-title">Edit User</h3>

@@ -197,4 +197,12 @@ public interface DashboardService {
 
 	public JSONArray getDiscoverLinuxDriveDetails(String ipAddress);
 
+	public JSONArray AverageCPUDataScore(String userScopeData);
+
+	public JSONArray AverageMemoryDataScore(String userScopeData);
+
+	public JSONArray AverageTempDataScore(String userScopeData);
+
+	public JSONArray PerformanceCountsScore(String userScopeData);
+
 }

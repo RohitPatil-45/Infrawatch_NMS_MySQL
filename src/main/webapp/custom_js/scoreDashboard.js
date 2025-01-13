@@ -2,11 +2,12 @@ window.onload = function() {
 
 	solidgaugeone();
 	solidgaugetwo();
-	containerspeedone();
 
-	containerspeedtwo();
+	AverageCPUData();
+	AverageMemoryData();
+	AverageTempData();
 
-	containerlinegraphone();
+	// containerlinegraphone();
 	containerbarghraphone();
 
 	containerlinegraphtwo();
@@ -148,14 +149,14 @@ function containerlinegraphthree() {
 	data
 			.forEach(function(dataEl) {
 				var timestampParts = dataEl.Timestamp.split(" "); // Splitting
-																	// the date
-																	// and time
-																	// part
+				// the date
+				// and time
+				// part
 				var dateParts = timestampParts[1].split("/"); // Extract day,
-																// month, and
-																// year
+				// month, and
+				// year
 				var timeParts = timestampParts[0].split(":"); // Extract hour
-																// and minutes
+				// and minutes
 
 				var timestamp = new Date("20" + dateParts[2], dateParts[0] - 1,
 						dateParts[1], timeParts[0], timeParts[1]);
@@ -187,12 +188,12 @@ function containerlinegraphthree() {
 		yAxis : [ {
 			title : {
 				text : 'Response Time (ms)' // Title for the Y-axis for response
-											// time
+			// time
 			}
 		}, {
 			title : {
 				text : 'Throughput (Mbps)' // Title for the Y-axis for
-											// throughput
+			// throughput
 			},
 			opposite : true
 		// Display this axis on the opposite side
@@ -204,7 +205,7 @@ function containerlinegraphthree() {
 			},
 			labels : {
 				format : '{value:%d/%m/%y}' // Format for x-axis labels:
-											// "dd/MM/yy"
+			// "dd/MM/yy"
 			}
 		},
 		exporting : {
@@ -212,7 +213,7 @@ function containerlinegraphthree() {
 		},
 		legend : {
 			enabled : true, // Enable the legend for both response time and
-							// throughput
+			// throughput
 			align : 'right', // Position legend to the right
 			verticalAlign : 'middle', // Align legend vertically in the center
 			layout : 'vertical' // Arrange legend items vertically
@@ -702,17 +703,126 @@ function containerlinegraphone() {
 
 }
 
-function containerspeedtwo() {
+function AverageTempData() {
+
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/AverageTempDataScore";
+	$.ajax({
+		type : 'GET',
+		url : serviceUrl,
+		dataType : 'json',
+		success : function(data) {
+
+			AverageTemp(data[0]);
+
+		}
+	});
+
+}
+
+function AverageTemp(Tempdata) {
+	Highcharts
+			.chart(
+					'container-AverageTemp',
+					{
+						chart : {
+							inverted : true,
+							marginLeft : 135,
+							type : 'bullet',
+							marginTop : 40,
+							height : '18%', // Set height to 30% of the
+							// container
+							width : null,
+							backgroundColor : 'rgba(255, 255, 255, 0.0)',
+						},
+						title : {
+							text : 'Average Temperature',
+							style : {
+								fontWeight : '100' // Set the font weight to
+							// 100 (light bold)
+							}
+						},
+						xAxis : {
+							categories : [ '<span class="hc-cat-title">Temperature</span><br/>Degree Celsius' ]
+						},
+						yAxis : {
+							gridLineWidth : 0,
+							plotBands : [ {
+								from : 0,
+								to : 27,
+								color : '#2dce89'
+							}, {
+								from : 27,
+								to : 40,
+								color : '#ffd928'
+							}, {
+								from : 40,
+								to : 9e9,
+								color : '#f5365c'
+							} ],
+							title : null
+						},
+						plotOptions : {
+							series : {
+								pointPadding : 0.25,
+								borderWidth : 0,
+								color : '#000',
+								targetOptions : {
+									width : '200%'
+								}
+							}
+						},
+						series : [ {
+							data : [ {
+								y : Tempdata
+							} ]
+						} ],
+						tooltip : {
+							pointFormat : '<b>{point.y}</b>'
+						},
+						legend : {
+							enabled : false
+						},
+						credits : {
+							enabled : false
+						},
+						exporting : {
+							enabled : false
+						}
+					});
+
+}
+
+function AverageMemoryData() {
+
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/AverageMemoryDataScore";
+	$.ajax({
+		type : 'GET',
+		url : serviceUrl,
+		dataType : 'json',
+		success : function(data) {
+
+			AverageMemory(data);
+
+		}
+	});
+
+}
+
+function AverageMemory(memorydata) {
 
 	const gaugeOptions = {
 		chart : {
 			type : 'solidgauge',
-			height : '40%',
+			height : '70%',
 			backgroundColor : 'rgba(255, 255, 255, 0.0)',
 		},
 
 		title : {
-			text : 'Average Memory', // Add your desired title
+			text : 'Average Memory Used', // Add your desired title
 			// here
 			style : {
 				fontWeight : '100' // Set the font weight to 100 (light bold)
@@ -778,7 +888,7 @@ function containerspeedtwo() {
 	// The speed gauge
 	const chartSpeed = Highcharts
 			.chart(
-					'container-speed002',
+					'container-AverageMemory',
 					Highcharts
 							.merge(
 									gaugeOptions,
@@ -796,8 +906,8 @@ function containerspeedtwo() {
 										},
 
 										series : [ {
-											name : 'Average Memory',
-											data : [ 30 ],
+											name : 'Average Memory Used',
+											data : memorydata,
 											dataLabels : {
 												format : '<div style="text-align:center">'
 														+ '<span style="font-size:25px">{y}</span><br/>'
@@ -815,17 +925,35 @@ function containerspeedtwo() {
 
 }
 
-function containerspeedone() {
+function AverageCPUData() {
+
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/AverageCPUDataScore";
+	$.ajax({
+		type : 'GET',
+		url : serviceUrl,
+		dataType : 'json',
+		success : function(data) {
+
+			AverageCPU(data);
+
+		}
+	});
+
+}
+
+function AverageCPU(cpudata) {
 
 	const gaugeOptions = {
 		chart : {
 			type : 'solidgauge',
-			height : '40%',
+			height : '70%',
 			backgroundColor : 'rgba(255, 255, 255, 0.0)',
 		},
 
 		title : {
-			text : 'Average CPU', // Add your desired title
+			text : 'Average CPU Utilization', // Add your desired title
 			// here
 			style : {
 				fontWeight : '100' // Set the font weight to 100 (light bold)
@@ -891,7 +1019,7 @@ function containerspeedone() {
 	// The speed gauge
 	const chartSpeed = Highcharts
 			.chart(
-					'container-speed001',
+					'container-AverageCPU',
 					Highcharts
 							.merge(
 									gaugeOptions,
@@ -909,8 +1037,8 @@ function containerspeedone() {
 										},
 
 										series : [ {
-											name : 'Average CPU',
-											data : [ 70 ],
+											name : 'Average CPU Utilization',
+											data : cpudata,
 											dataLabels : {
 												format : '<div style="text-align:center">'
 														+ '<span style="font-size:25px">{y}</span><br/>'

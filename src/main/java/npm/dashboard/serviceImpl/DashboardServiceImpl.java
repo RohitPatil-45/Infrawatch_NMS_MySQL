@@ -454,5 +454,25 @@ public class DashboardServiceImpl implements DashboardService {
 		return dao.getDiscoverLinuxDriveDetails(ipAddress);
 	}
 
+	public JSONArray AverageCPUDataScore(String userScopeData) {
+		// TODO Auto-generated method stub
+		return dao.AverageCPUDataScore(userScopeData);
+	}
+
+	public JSONArray AverageMemoryDataScore(String userScopeData) {
+		// TODO Auto-generated method stub
+		return dao.AverageMemoryDataScore(userScopeData);
+	}
+
+	public JSONArray AverageTempDataScore(String userScopeData) {
+		// TODO Auto-generated method stub
+		return dao.AverageTempDataScore(userScopeData);
+	}
+
+	public JSONArray PerformanceCountsScore(String userScopeData) {
+		// TODO Auto-generated method stub
+		return dao.PerformanceCountsScore(userScopeData);
+	}
+
 	
 }

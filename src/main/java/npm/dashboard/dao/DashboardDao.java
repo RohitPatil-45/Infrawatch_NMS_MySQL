@@ -83,7 +83,7 @@ public interface DashboardDao {
 	public JSONArray getCpuAlertInfo(String userScopeData);
 
 	public JSONArray getMemoryAlertInfo(String userScopeData);
-	
+
 	public JSONArray getDriveAlertInfo(String userScopeData);
 
 	public JSONArray getBandwidthAlertInfo(String userScopeData);
@@ -173,7 +173,7 @@ public interface DashboardDao {
 	JSONArray listingServiceDataDao(String ipAddress);
 
 	JSONArray listingFirewallDataDao(String ipAddress);
-	
+
 	JSONArray getDiscoverDriveDetails(String ipAddress);
 
 	public JSONArray viewSetParameterData(String ipAddress);
@@ -197,5 +197,13 @@ public interface DashboardDao {
 	public JSONArray listingMemoryModuleLinuxService(String ipAddress);
 
 	public JSONArray getDiscoverLinuxDriveDetails(String ipAddress);
+
+	public JSONArray AverageCPUDataScore(String userScopeData);
+
+	public JSONArray AverageMemoryDataScore(String userScopeData);
+
+	public JSONArray AverageTempDataScore(String userScopeData);
+
+	public JSONArray PerformanceCountsScore(String userScopeData);
 
 }

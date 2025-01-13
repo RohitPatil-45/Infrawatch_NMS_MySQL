@@ -944,40 +944,147 @@ p {
 				<!-- Main row -->
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-12 col-sm-6 col-md-3">
+						<div class="col-12 col-sm-6 col-md-4">
 							<div class="card card-stats mb-4 mb-xl-0">
 								<div class="card-body"
 									style="display: flex; justify-content: center;!important /* Centers horizontally */ align-items: center;!important  /* Centers vertically */ height: 100%;!important ">
-									<div class="row">
-										<div id="container-speed001" class="chart-container"></div>
+									<div class="row" style="width: 100% !important;">
+										<div class="col-12 col-sm-6 col-md-6">
+											<div class="row" style="width: 100% !important;">
+												<span
+													style="font-size: 20px; color: rgba(97, 97, 97, 0.65); font-weight: bold; fill: rgba(97, 97, 97, 0.65);">CPU</span>
+											</div>
+											<div class="row"
+												style="width: 100% !important; border-bottom: 3px solid #39393940;">
+												<div class="col-12 col-sm-6 col-md-5">
+													<span
+														style="display: flex; align-items: flex-end; width: 32px; height: 62px; font-size: 20px;">Healthy</span>
+												</div>
+												<div class="col-12 col-sm-6 col-md-6">
+													<span class=" font-weight-bold mb-0 text-success"
+														style="font-size: 3.20rem;">31</span>
+												</div>
+											</div>
+											<div class="row" style="width: 100% !important;">
+												<div class="col-12 col-sm-6 col-md-5">
+													<span
+														style="display: flex; align-items: flex-end; width: 32px; height: 62px; font-size: 20px;">Unhealthy</span>
+												</div>
+												<div class="col-12 col-sm-6 col-md-6">
+													<span class=" font-weight-bold mb-0 text-danger"
+														style="font-size: 3.20rem;">31</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-12 col-sm-6 col-md-6">
+											<div id="container-AverageCPU" class="chart-container"></div>
+										</div>
 									</div>
 
 								</div>
 							</div>
 						</div>
-						<div class="col-12 col-sm-6 col-md-3">
+						<div class="col-12 col-sm-6 col-md-4">
 							<div class="card card-stats mb-4 mb-xl-0">
 								<div class="card-body"
 									style="display: flex; justify-content: center;!important /* Centers horizontally */ align-items: center;!important  /* Centers vertically */ height: 100%;!important ">
-									<div class="row">
-										<div id="container-speed002" class="chart-container"></div>
+									<div class="row" style="width: 100% !important;">
+										<div class="col-12 col-sm-6 col-md-6">
+											<div class="row" style="width: 100% !important;">
+												<span
+													style="font-size: 20px; color: rgba(97, 97, 97, 0.65); font-weight: bold; fill: rgba(97, 97, 97, 0.65);">Memory</span>
+											</div>
+											<div class="row"
+												style="width: 100% !important; border-bottom: 3px solid #39393940;">
+												<div class="col-12 col-sm-6 col-md-5">
+													<span
+														style="display: flex; align-items: flex-end; width: 32px; height: 62px; font-size: 20px;">Healthy</span>
+												</div>
+												<div class="col-12 col-sm-6 col-md-6">
+													<span class=" font-weight-bold mb-0 text-success"
+														style="font-size: 3.20rem;">31</span>
+												</div>
+											</div>
+											<div class="row" style="width: 100% !important;">
+												<div class="col-12 col-sm-6 col-md-5">
+													<span
+														style="display: flex; align-items: flex-end; width: 32px; height: 62px; font-size: 20px;">Unhealthy</span>
+												</div>
+												<div class="col-12 col-sm-6 col-md-6">
+													<span class=" font-weight-bold mb-0 text-danger"
+														style="font-size: 3.20rem;">31</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-12 col-sm-6 col-md-6">
+
+											<div id="container-AverageMemory" class="chart-container"></div>
+
+										</div>
 									</div>
 
 								</div>
 							</div>
 						</div>
-						<div class="col-12 col-sm-6 col-md-6">
-							<div class="card">
+						<div class="col-12 col-sm-6 col-md-4">
+							<div class="card card-stats mb-4 mb-xl-0">
 								<div class="card-body"
-									style="display: flex; justify-content: center; align-items: center; height: 100%; padding: 1% 0;">
-									<div class="row">
-										<div id="containerlinegraph001"></div>
+									style="justify-content: center;!important /* Centers horizontally */ align-items: center;!important  /* Centers vertically */ height: 100%;!important ">
 
+
+									<div class="row">
+										<span
+											style="font-size: 20px; color: rgba(97, 97, 97, 0.65); font-weight: bold; fill: rgba(97, 97, 97, 0.65);">Temperature</span>
+									</div>
+									<div class="row">
+										<div class="col-12 col-sm-6 col-md-5">
+											<div class="row" style="border-right: 3px solid #39393940;">
+												<div class="col-12 col-sm-6 col-md-5">
+													<span
+														style="display: flex; align-items: flex-end; width: 32px; height: 45px; font-size: 16px;">Healthy</span>
+												</div>
+												<div class="col-12 col-sm-6 col-md-6">
+													<span class=" font-weight-bold mb-0 text-success"
+														style="font-size: 2.20rem;">31</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-12 col-sm-6 col-md-2"></div>
+										<div class="col-12 col-sm-6 col-md-5">
+											<div class="row">
+												<div class="col-12 col-sm-6 col-md-5">
+													<span
+														style="display: flex; align-items: flex-end; width: 32px; height: 45px; font-size: 16px;">Unhealthy</span>
+												</div>
+												<div class="col-12 col-sm-6 col-md-6">
+													<span class=" font-weight-bold mb-0 text-danger"
+														style="font-size: 2.20rem;">31</span>
+												</div>
+											</div>
+										</div>
+									</div>
+
+
+									<div class="row">
+										<div id="container-AverageTemp" class="chart-container"
+											style="padding-top: 1% !important;"></div>
 									</div>
 
 								</div>
 							</div>
 						</div>
+						<!-- 						<div class="col-12 col-sm-6 col-md-6"> -->
+						<!-- 							<div class="card"> -->
+						<!-- 								<div class="card-body" -->
+						<!-- 									style="display: flex; justify-content: center; align-items: center; height: 100%; padding: 1% 0;"> -->
+						<!-- 									<div class="row"> -->
+						<!-- 										<div id="containerlinegraph001"></div> -->
+
+						<!-- 									</div> -->
+
+						<!-- 								</div> -->
+						<!-- 							</div> -->
+						<!-- 						</div> -->
 
 
 					</div>
@@ -1265,6 +1372,7 @@ p {
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/highcharts-more.js"></script>
 	<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+	<script src="https://code.highcharts.com/modules/bullet.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 	<script src="https://code.highcharts.com/modules/export-data.js"></script>
 	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
