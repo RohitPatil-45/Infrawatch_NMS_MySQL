@@ -474,5 +474,10 @@ public class DashboardServiceImpl implements DashboardService {
 		return dao.PerformanceCountsScore(userScopeData);
 	}
 
+	public JSONArray PerformanceScoreDataList(String userScopeData, String parameter) {
+		// TODO Auto-generated method stub
+		return dao.PerformanceScoreDataList(userScopeData,parameter);
+	}
+
 	
 }

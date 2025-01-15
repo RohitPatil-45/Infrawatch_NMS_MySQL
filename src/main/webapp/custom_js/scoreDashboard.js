@@ -1,3 +1,15 @@
+var PerformanceScore = 0
+var PerformanceTotalScore = 0
+
+var AvailabilityScore = 0
+var AvailabilityTotalScore = 0
+
+var SecurityScore = 0
+var SecurityTotalScore = 0
+
+var CapacityScore = 0
+var CapacityTotalScore = 0
+
 window.onload = function() {
 
 	solidgaugeone();
@@ -7,6 +19,8 @@ window.onload = function() {
 	AverageMemoryData();
 	AverageTempData();
 
+	performanceHealthCountData();
+
 	// containerlinegraphone();
 	containerbarghraphone();
 
@@ -14,6 +28,37 @@ window.onload = function() {
 
 	containerspeedthree();
 	containerlinegraphthree();
+
+	// calculation for score
+	setTimeout(scoreCalculations, 5000);
+
+}
+
+function scoreCalculations() {
+
+	document.getElementById("mainperformanceScore").textContent = PerformanceScore;
+	document.getElementById("mainperformanceScoreTotal").textContent = "/"
+			+ PerformanceTotalScore;
+
+	// Calculate the percentage of the performance score
+	var percent = (PerformanceScore / PerformanceTotalScore) * 100;
+
+	// Get the element by ID
+	var performanceElement = document.getElementById('mainperformanceScore');
+
+	// Check the range and apply the appropriate class
+	if (percent >= 0 && percent <= 30) {
+		performanceElement.classList.remove('text-warning', 'text-success');
+		performanceElement.classList.add('text-danger');
+
+	} else if (percent > 30 && percent <= 70) {
+		performanceElement.classList.remove('text-danger', 'text-success');
+		performanceElement.classList.add('text-warning');
+
+	} else if (percent > 70 && percent <= 100) {
+		performanceElement.classList.remove('text-danger', 'text-warning');
+		performanceElement.classList.add('text-success');
+	}
 
 }
 
@@ -794,6 +839,68 @@ function AverageTemp(Tempdata) {
 
 }
 
+function performanceHealthCountData() {
+
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/PerformanceCountsScore";
+	$
+			.ajax({
+				type : 'GET',
+				url : serviceUrl,
+				dataType : 'json',
+				success : function(data) {
+					var counts = data[0];
+
+					// Extract values into separate variables
+					var cpuLowCount = parseInt(counts.CPU_Low_Count || 0, 10);
+					var cpuMediumCount = parseInt(counts.CPU_Medium_Count || 0,
+							10);
+					var cpuHighCount = parseInt(counts.CPU_High_Count || 0, 10);
+
+					var memoryLowCount = parseInt(counts.Memory_Low_Count || 0,
+							10);
+					var memoryMediumCount = parseInt(
+							counts.Memory_Medium_Count || 0, 10);
+					var memoryHighCount = parseInt(
+							counts.Memory_High_Count || 0, 10);
+
+					var temperatureLowCount = parseInt(
+							counts.Temperature_Low_Count || 0, 10);
+					var temperatureMediumCount = parseInt(
+							counts.Temperature_Medium_Count || 0, 10);
+					var temperatureHighCount = parseInt(
+							counts.Temperature_High_Count || 0, 10);
+
+					document.getElementById("PerformanceCPUHealthyCount").textContent = cpuLowCount
+							+ cpuMediumCount;
+					document.getElementById("PerformanceCPUUnHealthyCount").textContent = cpuHighCount;
+
+					document.getElementById("PerformanceMemoryHealthyCount").textContent = memoryLowCount
+							+ memoryMediumCount;
+					document.getElementById("PerformanceMemoryUnHealthyCount").textContent = memoryHighCount;
+
+					document.getElementById("PerformanceTempHealthyCount").textContent = temperatureLowCount
+							+ temperatureMediumCount;
+					document.getElementById("PerformanceTempUnHealthyCount").textContent = temperatureHighCount;
+
+					PerformanceScore = (cpuLowCount * 2) + (cpuMediumCount * 2)
+							+ (memoryLowCount * 2) + (memoryMediumCount * 2)
+							+ (temperatureLowCount * 2)
+							+ (temperatureMediumCount * 2);
+					PerformanceTotalScore = (cpuLowCount * 2)
+							+ (cpuMediumCount * 2) + (memoryLowCount * 2)
+							+ (memoryMediumCount * 2)
+							+ (temperatureLowCount * 2)
+							+ (temperatureMediumCount * 2) + (cpuHighCount * 2)
+							+ (memoryHighCount * 2)
+							+ (temperatureHighCount * 2);
+
+				}
+			});
+
+}
+
 function AverageMemoryData() {
 
 	var l = window.location;
@@ -1263,6 +1370,33 @@ function solidgaugeone() {
 				iconColor : '#ffffff'
 			}
 		} ]
+	});
+
+}
+
+function performanceheathydatalist() {
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/PerformanceDataList";
+	$.ajax({
+		type : 'GET',
+		url : serviceUrl,
+		data : 'Parameter=' + "cpuhealthy",
+		dataType : 'json',
+		success : function(data) {
+			// alert(data);
+
+			var table = $('#PerformanceinfoCPUtabledata').DataTable({
+				lengthChange : false,
+				autoWidth : false,
+				data : data,
+				"pageLength" : 5,
+				scrollX : true,
+				scrollY : true,
+				scrollY : '150px'
+			});
+
+		}
 	});
 
 }

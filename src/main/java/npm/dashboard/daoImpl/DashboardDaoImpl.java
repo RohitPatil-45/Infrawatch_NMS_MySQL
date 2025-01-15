@@ -4400,10 +4400,433 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 
 	public JSONArray PerformanceCountsScore(String userScopeData) {
 
-		JSONArray array1 = new JSONArray();
-		
+		JSONArray array1 = null;
 
-		System.out.println("device AverageTempDataScore summary data =" + array1);
+		int cpuHighCount = 0;
+		int cpuMediumCount = 0;
+		int cpuLowCount = 0;
+
+		// Counters for Memory Status
+		int memoryHighCount = 0;
+		int memoryMediumCount = 0;
+		int memoryLowCount = 0;
+
+		// Counters for Temperature
+		int tempHighCount = 0;
+		int tempMediumCount = 0;
+		int tempLowCount = 0;
+
+		int srno = 0;
+		try {
+			String sql = "SELECT \r\n" + "    COALESCE(nodemon.CPU_STATUS, '-') AS CPU_STATUS, \r\n"
+					+ "    COALESCE(nodemon.MEMORY_STATUS, '-') AS MEMORY_STATUS, \r\n"
+					+ "    COALESCE(nodemon.TEMPERATURE, '-') AS TEMPERATURE\r\n" + "FROM \r\n"
+					+ "    node_health_monitoring AS nodemon\r\n" + "JOIN \r\n" + "    add_node \r\n" + "ON \r\n"
+					+ "    nodemon.NODE_IP = add_node.DEVICE_IP\r\n" + "WHERE \r\n"
+					+ "    add_node.MONITORING_PARAM = 'Yes' AND " + userScopeData;
+
+			String db_type = environment.getRequiredProperty("DATABASE_TYPE");
+			if (db_type.equalsIgnoreCase("mysql")) {
+				sql = "SELECT \r\n" + "    COALESCE(nodemon.CPU_STATUS, '-') AS CPU_STATUS, \r\n"
+						+ "    COALESCE(nodemon.MEMORY_STATUS, '-') AS MEMORY_STATUS, \r\n"
+						+ "    COALESCE(nodemon.TEMPERATURE, '-') AS TEMPERATURE\r\n" + "FROM \r\n"
+						+ "    node_health_monitoring AS nodemon\r\n" + "JOIN \r\n" + "    add_node \r\n" + "ON \r\n"
+						+ "    nodemon.NODE_IP = add_node.DEVICE_IP\r\n" + "WHERE \r\n"
+						+ "    add_node.MONITORING_PARAM = 'Yes' AND " + userScopeData;
+			} else if (db_type.equalsIgnoreCase("mssql")) {
+
+			} else if (db_type.equalsIgnoreCase("oracle")) {
+
+			}
+
+			SQLQuery query = getSession().createSQLQuery(sql);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+
+			List results = query.list();
+			array1 = new JSONArray();
+
+			for (Object object : results) {
+				Map row = (Map) object;
+
+				String cpuStatus = (String) row.get("CPU_STATUS").toString().trim();
+				String memoryStatus = (String) row.get("MEMORY_STATUS").toString().trim();
+				String temperatureStr = (String) row.get("TEMPERATURE").toString().trim();
+
+				// Increment CPU counters
+				if ("High".equalsIgnoreCase(cpuStatus)) {
+					cpuHighCount++;
+				} else if ("Medium".equalsIgnoreCase(cpuStatus)) {
+					cpuMediumCount++;
+				} else if ("Low".equalsIgnoreCase(cpuStatus)) {
+					cpuLowCount++;
+				} else {
+					cpuLowCount++;
+				}
+
+				// Increment Memory counters
+				if ("High".equalsIgnoreCase(memoryStatus)) {
+					memoryHighCount++;
+				} else if ("Medium".equalsIgnoreCase(memoryStatus)) {
+					memoryMediumCount++;
+				} else if ("Low".equalsIgnoreCase(memoryStatus)) {
+					memoryLowCount++;
+				} else {
+					cpuLowCount++;
+				}
+
+				// Check and increment Temperature counters
+				try {
+					double temperature = Double.parseDouble(temperatureStr);
+					if (temperature >= 0 && temperature <= 27) {
+						tempLowCount++;
+					} else if (temperature > 27 && temperature <= 40) {
+						tempMediumCount++;
+					} else if (temperature > 40) {
+						tempHighCount++;
+					} else {
+						tempLowCount++;
+					}
+
+				} catch (NumberFormatException e) {
+					// Handle invalid or missing temperature values
+					System.err.println("Invalid temperature value: " + temperatureStr);
+					tempLowCount++;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+
+		JSONObject countsObject = new JSONObject();
+		countsObject.put("CPU_High_Count", cpuHighCount);
+		countsObject.put("CPU_Medium_Count", cpuMediumCount);
+		countsObject.put("CPU_Low_Count", cpuLowCount);
+
+		countsObject.put("Memory_High_Count", memoryHighCount);
+		countsObject.put("Memory_Medium_Count", memoryMediumCount);
+		countsObject.put("Memory_Low_Count", memoryLowCount);
+
+		countsObject.put("Temperature_High_Count", tempHighCount);
+		countsObject.put("Temperature_Medium_Count", tempMediumCount);
+		countsObject.put("Temperature_Low_Count", tempLowCount);
+
+		// Add counts to JSON array
+		array1.put(countsObject);
+
+		System.out.println("device PerformanceCountsScore summary data =" + array1);
+		return array1;
+	}
+
+	public JSONArray PerformanceScoreDataList(String userScopeData, String parameter) {
+
+		JSONArray array = null;
+		JSONArray array1 = new JSONArray();
+		int srno = 0;
+
+		String sql2 = "";
+		try {
+
+			String db_type = environment.getRequiredProperty("DATABASE_TYPE");
+			if (db_type.equalsIgnoreCase("mysql")) {
+				if (parameter.trim().equalsIgnoreCase("cpuhealthy")) {
+
+					sql2 = "SELECT \r\n" + "    COALESCE(nodemon.CPU_STATUS, '') AS CPU_STATUS,\r\n"
+							+ "    COALESCE(nodemon.CPU_UTILIZATION, '') AS CPU_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.FREE_MEMORY, '') AS FREE_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.MAKE_AND_MODEL, '') AS MAKE_AND_MODEL,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_STATUS, '') AS MEMORY_STATUS,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_UTILIZATION, '') AS MEMORY_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.NODE_IP, '') AS NODE_IP,\r\n"
+							+ "    COALESCE(nodemon.NODE_NAME, '') AS NODE_NAME,\r\n"
+							+ "    COALESCE(nodemon.SERIAL_NO, '') AS SERIAL_NO,\r\n"
+							+ "    COALESCE(nodemon.TEMPERATURE, '') AS TEMPERATURE,\r\n"
+							+ "    COALESCE(nodemon.TOTAL_MEMORY, '') AS TOTAL_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.USED_MEMORY, '') AS USED_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.VERSION, '') AS VERSION,\r\n"
+							+ "    COALESCE(add_node.GROUP_NAME, '') AS GROUP_NAME\r\n"
+							+ "FROM node_health_monitoring AS nodemon\r\n"
+							+ "JOIN add_node ON nodemon.NODE_IP = add_node.DEVICE_IP\r\n"
+							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND  nodemon.CPU_STATUS !='High' AND "
+							+ userScopeData;
+
+				} else if (parameter.trim().equalsIgnoreCase("cpuunhealthy")) {
+
+					sql2 = "SELECT \r\n" + "    COALESCE(nodemon.CPU_STATUS, '') AS CPU_STATUS,\r\n"
+							+ "    COALESCE(nodemon.CPU_UTILIZATION, '') AS CPU_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.FREE_MEMORY, '') AS FREE_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.MAKE_AND_MODEL, '') AS MAKE_AND_MODEL,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_STATUS, '') AS MEMORY_STATUS,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_UTILIZATION, '') AS MEMORY_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.NODE_IP, '') AS NODE_IP,\r\n"
+							+ "    COALESCE(nodemon.NODE_NAME, '') AS NODE_NAME,\r\n"
+							+ "    COALESCE(nodemon.SERIAL_NO, '') AS SERIAL_NO,\r\n"
+							+ "    COALESCE(nodemon.TEMPERATURE, '') AS TEMPERATURE,\r\n"
+							+ "    COALESCE(nodemon.TOTAL_MEMORY, '') AS TOTAL_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.USED_MEMORY, '') AS USED_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.VERSION, '') AS VERSION,\r\n"
+							+ "    COALESCE(add_node.GROUP_NAME, '') AS GROUP_NAME\r\n"
+							+ "FROM node_health_monitoring AS nodemon\r\n"
+							+ "JOIN add_node ON nodemon.NODE_IP = add_node.DEVICE_IP\r\n"
+							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND  nodemon.CPU_STATUS ='High'  AND "
+							+ userScopeData;
+
+				} else if (parameter.trim().equalsIgnoreCase("memoryhealthy")) {
+
+					sql2 = "SELECT \r\n" + "    COALESCE(nodemon.CPU_STATUS, '') AS CPU_STATUS,\r\n"
+							+ "    COALESCE(nodemon.CPU_UTILIZATION, '') AS CPU_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.FREE_MEMORY, '') AS FREE_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.MAKE_AND_MODEL, '') AS MAKE_AND_MODEL,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_STATUS, '') AS MEMORY_STATUS,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_UTILIZATION, '') AS MEMORY_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.NODE_IP, '') AS NODE_IP,\r\n"
+							+ "    COALESCE(nodemon.NODE_NAME, '') AS NODE_NAME,\r\n"
+							+ "    COALESCE(nodemon.SERIAL_NO, '') AS SERIAL_NO,\r\n"
+							+ "    COALESCE(nodemon.TEMPERATURE, '') AS TEMPERATURE,\r\n"
+							+ "    COALESCE(nodemon.TOTAL_MEMORY, '') AS TOTAL_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.USED_MEMORY, '') AS USED_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.VERSION, '') AS VERSION,\r\n"
+							+ "    COALESCE(add_node.GROUP_NAME, '') AS GROUP_NAME\r\n"
+							+ "FROM node_health_monitoring AS nodemon\r\n"
+							+ "JOIN add_node ON nodemon.NODE_IP = add_node.DEVICE_IP\r\n"
+							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND  nodemon.MEMORY_STATUS !='High' AND "
+							+ userScopeData;
+
+				} else if (parameter.trim().equalsIgnoreCase("memoryunhealthy")) {
+
+					sql2 = "SELECT \r\n" + "    COALESCE(nodemon.CPU_STATUS, '') AS CPU_STATUS,\r\n"
+							+ "    COALESCE(nodemon.CPU_UTILIZATION, '') AS CPU_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.FREE_MEMORY, '') AS FREE_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.MAKE_AND_MODEL, '') AS MAKE_AND_MODEL,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_STATUS, '') AS MEMORY_STATUS,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_UTILIZATION, '') AS MEMORY_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.NODE_IP, '') AS NODE_IP,\r\n"
+							+ "    COALESCE(nodemon.NODE_NAME, '') AS NODE_NAME,\r\n"
+							+ "    COALESCE(nodemon.SERIAL_NO, '') AS SERIAL_NO,\r\n"
+							+ "    COALESCE(nodemon.TEMPERATURE, '') AS TEMPERATURE,\r\n"
+							+ "    COALESCE(nodemon.TOTAL_MEMORY, '') AS TOTAL_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.USED_MEMORY, '') AS USED_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.VERSION, '') AS VERSION,\r\n"
+							+ "    COALESCE(add_node.GROUP_NAME, '') AS GROUP_NAME\r\n"
+							+ "FROM node_health_monitoring AS nodemon\r\n"
+							+ "JOIN add_node ON nodemon.NODE_IP = add_node.DEVICE_IP\r\n"
+							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND  nodemon.MEMORY_STATUS ='High' AND "
+							+ userScopeData;
+
+				} else if (parameter.trim().equalsIgnoreCase("temphealthy")) {
+
+					sql2 = "SELECT \r\n" + "    COALESCE(nodemon.CPU_STATUS, '') AS CPU_STATUS,\r\n"
+							+ "    COALESCE(nodemon.CPU_UTILIZATION, '') AS CPU_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.FREE_MEMORY, '') AS FREE_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.MAKE_AND_MODEL, '') AS MAKE_AND_MODEL,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_STATUS, '') AS MEMORY_STATUS,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_UTILIZATION, '') AS MEMORY_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.NODE_IP, '') AS NODE_IP,\r\n"
+							+ "    COALESCE(nodemon.NODE_NAME, '') AS NODE_NAME,\r\n"
+							+ "    COALESCE(nodemon.SERIAL_NO, '') AS SERIAL_NO,\r\n"
+							+ "    COALESCE(nodemon.TEMPERATURE, '') AS TEMPERATURE,\r\n"
+							+ "    COALESCE(nodemon.TOTAL_MEMORY, '') AS TOTAL_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.USED_MEMORY, '') AS USED_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.VERSION, '') AS VERSION,\r\n"
+							+ "    COALESCE(add_node.GROUP_NAME, '') AS GROUP_NAME\r\n"
+							+ "FROM node_health_monitoring AS nodemon\r\n"
+							+ "JOIN add_node ON nodemon.NODE_IP = add_node.DEVICE_IP\r\n"
+							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND  nodemon.TEMPERATURE > 40  AND "
+							+ userScopeData;
+
+				} else if (parameter.trim().equalsIgnoreCase("tempunhealthy")) {
+
+					sql2 = "SELECT \r\n" + "    COALESCE(nodemon.CPU_STATUS, '') AS CPU_STATUS,\r\n"
+							+ "    COALESCE(nodemon.CPU_UTILIZATION, '') AS CPU_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.FREE_MEMORY, '') AS FREE_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.MAKE_AND_MODEL, '') AS MAKE_AND_MODEL,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_STATUS, '') AS MEMORY_STATUS,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_UTILIZATION, '') AS MEMORY_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.NODE_IP, '') AS NODE_IP,\r\n"
+							+ "    COALESCE(nodemon.NODE_NAME, '') AS NODE_NAME,\r\n"
+							+ "    COALESCE(nodemon.SERIAL_NO, '') AS SERIAL_NO,\r\n"
+							+ "    COALESCE(nodemon.TEMPERATURE, '') AS TEMPERATURE,\r\n"
+							+ "    COALESCE(nodemon.TOTAL_MEMORY, '') AS TOTAL_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.USED_MEMORY, '') AS USED_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.VERSION, '') AS VERSION,\r\n"
+							+ "    COALESCE(add_node.GROUP_NAME, '') AS GROUP_NAME\r\n"
+							+ "FROM node_health_monitoring AS nodemon\r\n"
+							+ "JOIN add_node ON nodemon.NODE_IP = add_node.DEVICE_IP\r\n"
+							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND  nodemon.TEMPERATURE <= 40 AND "
+							+ userScopeData;
+
+				} else {
+
+					sql2 = "SELECT \r\n" + "    COALESCE(nodemon.CPU_STATUS, '') AS CPU_STATUS,\r\n"
+							+ "    COALESCE(nodemon.CPU_UTILIZATION, '') AS CPU_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.FREE_MEMORY, '') AS FREE_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.MAKE_AND_MODEL, '') AS MAKE_AND_MODEL,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_STATUS, '') AS MEMORY_STATUS,\r\n"
+							+ "    COALESCE(nodemon.MEMORY_UTILIZATION, '') AS MEMORY_UTILIZATION,\r\n"
+							+ "    COALESCE(nodemon.NODE_IP, '') AS NODE_IP,\r\n"
+							+ "    COALESCE(nodemon.NODE_NAME, '') AS NODE_NAME,\r\n"
+							+ "    COALESCE(nodemon.SERIAL_NO, '') AS SERIAL_NO,\r\n"
+							+ "    COALESCE(nodemon.TEMPERATURE, '') AS TEMPERATURE,\r\n"
+							+ "    COALESCE(nodemon.TOTAL_MEMORY, '') AS TOTAL_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.USED_MEMORY, '') AS USED_MEMORY,\r\n"
+							+ "    COALESCE(nodemon.VERSION, '') AS VERSION,\r\n"
+							+ "    COALESCE(add_node.GROUP_NAME, '') AS GROUP_NAME\r\n"
+							+ "FROM node_health_monitoring AS nodemon\r\n"
+							+ "JOIN add_node ON nodemon.NODE_IP = add_node.DEVICE_IP\r\n"
+							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND " + userScopeData;
+
+				}
+			} else if (db_type.equalsIgnoreCase("mssql")) {
+
+			} else if (db_type.equalsIgnoreCase("oracle")) {
+
+			}
+
+			SQLQuery query2 = getSession().createSQLQuery(sql2);
+			query2.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+
+			List results2 = query2.list();
+
+			for (Object object : results2) {
+				Map row = (Map) object;
+
+				if (parameter.trim().equalsIgnoreCase("cpuhealthy")) {
+					srno++;
+					array = new JSONArray();
+					array.put(srno);
+					array.put(row.get("NODE_IP"));
+					array.put("<span class='text-success'>" + row.get("CPU_STATUS") + "</span>");
+					array.put(row.get("CPU_UTILIZATION"));
+					array.put(row.get("NODE_NAME"));
+					array.put(row.get("SERIAL_NO"));
+					array.put(row.get("MAKE_AND_MODEL"));
+					array.put(row.get("VERSION"));
+					array.put(row.get("GROUP_NAME"));
+
+					array1.put(array);
+
+				} else if (parameter.trim().equalsIgnoreCase("cpuunhealthy")) {
+
+					srno++;
+					array = new JSONArray();
+					array.put(srno);
+					array.put(row.get("NODE_IP"));
+					array.put("<span class='text-danger'>" + row.get("CPU_STATUS") + "</span>");
+					array.put(row.get("CPU_UTILIZATION"));
+					array.put(row.get("NODE_NAME"));
+					array.put(row.get("SERIAL_NO"));
+					array.put(row.get("MAKE_AND_MODEL"));
+					array.put(row.get("VERSION"));
+					array.put(row.get("GROUP_NAME"));
+
+					array1.put(array);
+
+				} else if (parameter.trim().equalsIgnoreCase("memoryhealthy")) {
+
+					srno++;
+					array = new JSONArray();
+					array.put(srno);
+					array.put(row.get("NODE_IP"));
+					array.put(row.get("NODE_NAME"));
+					array.put(row.get("SERIAL_NO"));
+					array.put(row.get("FREE_MEMORY"));
+					array.put(row.get("MAKE_AND_MODEL"));
+					array.put(row.get("MEMORY_STATUS"));
+					array.put(row.get("MEMORY_UTILIZATION"));
+					array.put(row.get("TOTAL_MEMORY"));
+					array.put(row.get("USED_MEMORY"));
+					array.put(row.get("VERSION"));
+					array.put(row.get("GROUP_NAME"));
+
+					array1.put(array);
+
+				} else if (parameter.trim().equalsIgnoreCase("memoryunhealthy")) {
+
+					srno++;
+					array = new JSONArray();
+					array.put(srno);
+					array.put(row.get("NODE_IP"));
+					array.put(row.get("NODE_NAME"));
+					array.put(row.get("SERIAL_NO"));
+					array.put(row.get("FREE_MEMORY"));
+					array.put(row.get("MAKE_AND_MODEL"));
+					array.put(row.get("MEMORY_STATUS"));
+					array.put(row.get("MEMORY_UTILIZATION"));
+					array.put(row.get("TOTAL_MEMORY"));
+					array.put(row.get("USED_MEMORY"));
+					array.put(row.get("VERSION"));
+					array.put(row.get("GROUP_NAME"));
+
+					array1.put(array);
+
+				} else if (parameter.trim().equalsIgnoreCase("temphealthy")) {
+
+					srno++;
+					array = new JSONArray();
+					array.put(srno);
+					array.put(row.get("NODE_IP"));
+					array.put(row.get("NODE_NAME"));
+					array.put(row.get("SERIAL_NO"));
+					array.put(row.get("FREE_MEMORY"));
+					array.put(row.get("MAKE_AND_MODEL"));
+					array.put(row.get("TEMPERATURE"));
+					array.put(row.get("TOTAL_MEMORY"));
+					array.put(row.get("USED_MEMORY"));
+					array.put(row.get("VERSION"));
+					array.put(row.get("GROUP_NAME"));
+
+					array1.put(array);
+
+				} else if (parameter.trim().equalsIgnoreCase("tempunhealthy")) {
+
+					srno++;
+					array = new JSONArray();
+					array.put(srno);
+					array.put(row.get("NODE_IP"));
+					array.put(row.get("NODE_NAME"));
+					array.put(row.get("SERIAL_NO"));
+					array.put(row.get("FREE_MEMORY"));
+					array.put(row.get("MAKE_AND_MODEL"));
+					array.put(row.get("TEMPERATURE"));
+					array.put(row.get("TOTAL_MEMORY"));
+					array.put(row.get("USED_MEMORY"));
+					array.put(row.get("VERSION"));
+					array.put(row.get("GROUP_NAME"));
+
+					array1.put(array);
+
+				} else {
+
+					srno++;
+					array = new JSONArray();
+					array.put(srno);
+					array.put(row.get("NODE_IP"));
+					array.put(row.get("NODE_NAME"));
+					array.put(row.get("SERIAL_NO"));
+					array.put(row.get("CPU_STATUS"));
+					array.put(row.get("CPU_UTILIZATION"));
+					array.put(row.get("FREE_MEMORY"));
+					array.put(row.get("MAKE_AND_MODEL"));
+					array.put(row.get("MEMORY_STATUS"));
+					array.put(row.get("MEMORY_UTILIZATION"));
+					array.put(row.get("TEMPERATURE"));
+					array.put(row.get("TOTAL_MEMORY"));
+					array.put(row.get("USED_MEMORY"));
+					array.put(row.get("VERSION"));
+					array.put(row.get("GROUP_NAME"));
+
+					array1.put(array);
+
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
+		System.out.println("PerformanceScoreDataList data =" + array1);
 		return array1;
 	}
 

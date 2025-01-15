@@ -205,4 +205,6 @@ public interface DashboardService {
 
 	public JSONArray PerformanceCountsScore(String userScopeData);
 
+	public JSONArray PerformanceScoreDataList(String userScopeData, String parameter);
+
 }

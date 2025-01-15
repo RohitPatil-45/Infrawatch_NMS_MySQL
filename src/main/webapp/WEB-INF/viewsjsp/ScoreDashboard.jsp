@@ -763,9 +763,11 @@ p {
 												<span class="text-uppercase  mb-0">&nbsp;Score</span>
 											</div>
 											<div class="row">
-												<span class="h2 font-weight-bold mb-0 text-warning">07</span><span
+												<span class="h2 font-weight-bold mb-0"
+													id="mainperformanceScore">00</span><span
 													class="font-weight-bold"
-													style="display: flex; justify-content: flex-end; align-items: flex-end; width: 32px; height: 45px;">/10</span>
+													style="display: flex; justify-content: flex-end; align-items: flex-end; width: 32px; height: 45px;"
+													id="mainperformanceScoreTotal">/00</span>
 											</div>
 										</div>
 										<div class="col-auto">
@@ -955,14 +957,18 @@ p {
 													style="font-size: 20px; color: rgba(97, 97, 97, 0.65); font-weight: bold; fill: rgba(97, 97, 97, 0.65);">CPU</span>
 											</div>
 											<div class="row"
-												style="width: 100% !important; border-bottom: 3px solid #39393940;">
+												style="width: 100% !important; border-bottom: 3px solid #39393940; cursor: pointer !important;"
+												data-toggle="modal"
+												data-target="#Performance-info-CPU-modal"
+												onclick="performanceheathydatalist();">
 												<div class="col-12 col-sm-6 col-md-5">
 													<span
 														style="display: flex; align-items: flex-end; width: 32px; height: 62px; font-size: 20px;">Healthy</span>
 												</div>
 												<div class="col-12 col-sm-6 col-md-6">
 													<span class=" font-weight-bold mb-0 text-success"
-														style="font-size: 3.20rem;">31</span>
+														style="font-size: 3.20rem;"
+														id="PerformanceCPUHealthyCount">0</span>
 												</div>
 											</div>
 											<div class="row" style="width: 100% !important;">
@@ -972,7 +978,8 @@ p {
 												</div>
 												<div class="col-12 col-sm-6 col-md-6">
 													<span class=" font-weight-bold mb-0 text-danger"
-														style="font-size: 3.20rem;">31</span>
+														style="font-size: 3.20rem;"
+														id="PerformanceCPUUnHealthyCount">0</span>
 												</div>
 											</div>
 										</div>
@@ -1002,7 +1009,8 @@ p {
 												</div>
 												<div class="col-12 col-sm-6 col-md-6">
 													<span class=" font-weight-bold mb-0 text-success"
-														style="font-size: 3.20rem;">31</span>
+														style="font-size: 3.20rem;"
+														id="PerformanceMemoryHealthyCount">0</span>
 												</div>
 											</div>
 											<div class="row" style="width: 100% !important;">
@@ -1012,7 +1020,8 @@ p {
 												</div>
 												<div class="col-12 col-sm-6 col-md-6">
 													<span class=" font-weight-bold mb-0 text-danger"
-														style="font-size: 3.20rem;">31</span>
+														style="font-size: 3.20rem;"
+														id="PerformanceMemoryUnHealthyCount">0</span>
 												</div>
 											</div>
 										</div>
@@ -1045,7 +1054,8 @@ p {
 												</div>
 												<div class="col-12 col-sm-6 col-md-6">
 													<span class=" font-weight-bold mb-0 text-success"
-														style="font-size: 2.20rem;">31</span>
+														style="font-size: 2.20rem;"
+														id="PerformanceTempHealthyCount">0</span>
 												</div>
 											</div>
 										</div>
@@ -1058,7 +1068,8 @@ p {
 												</div>
 												<div class="col-12 col-sm-6 col-md-6">
 													<span class=" font-weight-bold mb-0 text-danger"
-														style="font-size: 2.20rem;">31</span>
+														style="font-size: 2.20rem;"
+														id="PerformanceTempUnHealthyCount">0</span>
 												</div>
 											</div>
 										</div>
@@ -1295,7 +1306,48 @@ p {
 		<!-- /.content-wrapper -->
 	</div>
 
+	<!-- modals start here -->
 
+	<div class="modal fade" id="Performance-info-CPU-modal">
+		<!-- 	style="height: 500px;" -->
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content" style="width: fit-content;">
+				<div class="modal-header"
+					style="background-color: transparent !important;">
+					<h4 class="modal-title">Performance CPU</h4>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table id="PerformanceinfoCPUtabledata"
+						class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Sr No</th>
+								<th>IP Address</th>
+								<th>CPU Status</th>
+								<th>CPU Utilization</th>
+								<th>NODE NAME</th>
+								<th>SERIAL NO</th>
+								<th>MAKE AND MODEL</th>
+								<th>VERSION</th>
+								<th>GROUP NAME</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+
+					</table>
+				</div>
+
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
 
 
 	<!-- ./wrapper -->

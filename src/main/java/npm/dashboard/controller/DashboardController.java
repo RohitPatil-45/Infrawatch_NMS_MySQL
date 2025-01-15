@@ -1725,4 +1725,27 @@ public class DashboardController {
 		return null;
 	}
 
+	@RequestMapping(value = "/PerformanceDataList", method = RequestMethod.GET)
+	public JSONArray PerformanceDataList(ModelMap model, HttpServletRequest request, HttpServletResponse response,
+			HttpSession session, HttpServletRequest req) {
+		String userScopeData = (String) session.getAttribute("userScope");
+
+		String Parameter = req.getParameter("Parameter");
+
+		PrintWriter out = null;
+		try {
+			out = response.getWriter();
+			JSONArray jsonresponse = service.PerformanceScoreDataList(userScopeData, Parameter);
+			out.print(jsonresponse);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			out.close();
+		}
+
+		return null;
+	}
+
 }

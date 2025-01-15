@@ -206,4 +206,6 @@ public interface DashboardDao {
 
 	public JSONArray PerformanceCountsScore(String userScopeData);
 
+	public JSONArray PerformanceScoreDataList(String userScopeData, String parameter);
+
 }
