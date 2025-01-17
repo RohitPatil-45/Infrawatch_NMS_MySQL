@@ -730,9 +730,9 @@ p {
 											</div>
 											<div class="row">
 												<span class=" font-weight-bold mb-0 text-warning"
-													style="font-size: 3.20rem;">31</span><span
+													style="font-size: 3.20rem;">38</span><span
 													class="font-weight-bold"
-													style="display: flex; justify-content: flex-end; align-items: flex-end; width: 32px; height: 62px;">/45</span>
+													style="display: flex; justify-content: flex-end; align-items: flex-end; width: 32px; height: 62px;">/65</span>
 											</div>
 										</div>
 										<div class="col-auto">
@@ -971,7 +971,11 @@ p {
 														id="PerformanceCPUHealthyCount">0</span>
 												</div>
 											</div>
-											<div class="row" style="width: 100% !important;">
+											<div class="row"
+												style="width: 100% !important; cursor: pointer !important;"
+												data-toggle="modal"
+												data-target="#Performance-info-CPU-modal"
+												onclick="performanceunheathydatalist();">
 												<div class="col-12 col-sm-6 col-md-5">
 													<span
 														style="display: flex; align-items: flex-end; width: 32px; height: 62px; font-size: 20px;">Unhealthy</span>
@@ -983,7 +987,10 @@ p {
 												</div>
 											</div>
 										</div>
-										<div class="col-12 col-sm-6 col-md-6">
+										<div class="col-12 col-sm-6 col-md-6" data-toggle="modal"
+											style="cursor: pointer !important;" data-toggle="modal"
+											data-target="#Performance-info-all-modal"
+											onclick="performancealldatalist();">
 											<div id="container-AverageCPU" class="chart-container"></div>
 										</div>
 									</div>
@@ -1002,7 +1009,10 @@ p {
 													style="font-size: 20px; color: rgba(97, 97, 97, 0.65); font-weight: bold; fill: rgba(97, 97, 97, 0.65);">Memory</span>
 											</div>
 											<div class="row"
-												style="width: 100% !important; border-bottom: 3px solid #39393940;">
+												style="width: 100% !important; border-bottom: 3px solid #39393940; cursor: pointer !important;"
+												data-toggle="modal"
+												data-target="#Performance-info-Memory-modal"
+												onclick="performanceMemoryheathydatalist();">
 												<div class="col-12 col-sm-6 col-md-5">
 													<span
 														style="display: flex; align-items: flex-end; width: 32px; height: 62px; font-size: 20px;">Healthy</span>
@@ -1013,7 +1023,11 @@ p {
 														id="PerformanceMemoryHealthyCount">0</span>
 												</div>
 											</div>
-											<div class="row" style="width: 100% !important;">
+											<div class="row"
+												style="width: 100% !important; cursor: pointer !important;"
+												data-toggle="modal"
+												data-target="#Performance-info-Memory-modal"
+												onclick="performanceMemoryunheathydatalist();">
 												<div class="col-12 col-sm-6 col-md-5">
 													<span
 														style="display: flex; align-items: flex-end; width: 32px; height: 62px; font-size: 20px;">Unhealthy</span>
@@ -1025,7 +1039,10 @@ p {
 												</div>
 											</div>
 										</div>
-										<div class="col-12 col-sm-6 col-md-6">
+										<div class="col-12 col-sm-6 col-md-6"
+											style="cursor: pointer !important;" data-toggle="modal"
+											data-target="#Performance-info-all-modal"
+											onclick="performancealldatalist();">
 
 											<div id="container-AverageMemory" class="chart-container"></div>
 
@@ -1047,7 +1064,11 @@ p {
 									</div>
 									<div class="row">
 										<div class="col-12 col-sm-6 col-md-5">
-											<div class="row" style="border-right: 3px solid #39393940;">
+											<div class="row"
+												style="border-right: 3px solid #39393940; cursor: pointer !important;"
+												data-toggle="modal"
+												data-target="#Performance-info-temp-modal"
+												onclick="performancetemphealthydatalist();">
 												<div class="col-12 col-sm-6 col-md-5">
 													<span
 														style="display: flex; align-items: flex-end; width: 32px; height: 45px; font-size: 16px;">Healthy</span>
@@ -1061,7 +1082,10 @@ p {
 										</div>
 										<div class="col-12 col-sm-6 col-md-2"></div>
 										<div class="col-12 col-sm-6 col-md-5">
-											<div class="row">
+											<div class="row" style="cursor: pointer !important;"
+												data-toggle="modal"
+												data-target="#Performance-info-temp-modal"
+												onclick="performancetempunhealthydatalist();">
 												<div class="col-12 col-sm-6 col-md-5">
 													<span
 														style="display: flex; align-items: flex-end; width: 32px; height: 45px; font-size: 16px;">Unhealthy</span>
@@ -1076,7 +1100,9 @@ p {
 									</div>
 
 
-									<div class="row">
+									<div class="row" style="cursor: pointer !important;"
+										data-toggle="modal" data-target="#Performance-info-all-modal"
+										onclick="performancealldatalist();">
 										<div id="container-AverageTemp" class="chart-container"
 											style="padding-top: 1% !important;"></div>
 									</div>
@@ -1330,10 +1356,145 @@ p {
 								<th>CPU Status</th>
 								<th>CPU Utilization</th>
 								<th>NODE NAME</th>
-								<th>SERIAL NO</th>
+								<!-- 								<th>SERIAL NO</th> -->
 								<th>MAKE AND MODEL</th>
 								<th>VERSION</th>
 								<th>GROUP NAME</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+
+					</table>
+				</div>
+
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+
+	<div class="modal fade" id="Performance-info-all-modal" style="">
+		<!-- 	style="height: 500px;" -->
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content" style="">
+				<div class="modal-header"
+					style="background-color: transparent !important;">
+					<h4 class="modal-title">Performance</h4>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table id="Performanceinfoalltabledata"
+						class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Sr No</th>
+								<th>NODE_IP</th>
+								<th>NODE_NAME</th>
+								<!-- 								<th>SERIAL_NO</th> -->
+								<th>CPU_STATUS</th>
+								<th>CPU_UTILIZATION</th>
+								<th>FREE_MEMORY</th>
+								<th>MAKE_AND_MODEL</th>
+								<th>MEMORY_STATUS</th>
+								<th>MEMORY_UTILIZATION</th>
+								<th>TEMPERATURE</th>
+								<th>TOTAL_MEMORY</th>
+								<th>USED_MEMORY</th>
+								<th>VERSION</th>
+								<th>GROUP_NAME</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+
+					</table>
+				</div>
+
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+
+	<div class="modal fade" id="Performance-info-Memory-modal" style="">
+		<!-- 	style="height: 500px;" -->
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content" style="">
+				<div class="modal-header"
+					style="background-color: transparent !important;">
+					<h4 class="modal-title">Performance Memory</h4>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table id="Performanceinfomemorytabledata"
+						class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Sr. No.</th>
+								<th>Node IP</th>
+								<th>Node Name</th>
+								<!-- 								<th>Serial No.</th> -->
+								<th>Free Memory</th>
+								<th>Make and Model</th>
+								<th>Memory Status</th>
+								<th>Memory Utilization</th>
+								<th>Total Memory</th>
+								<th>Used Memory</th>
+								<th>Version</th>
+								<th>Group Name</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+
+					</table>
+				</div>
+
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+
+	<div class="modal fade" id="Performance-info-temp-modal" style="">
+		<!-- 	style="height: 500px;" -->
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content" style="">
+				<div class="modal-header"
+					style="background-color: transparent !important;">
+					<h4 class="modal-title">Performance Temperature</h4>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table id="Performanceinfotemptabledata"
+						class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Sr. No.</th>
+								<th>Node IP</th>
+								<th>Node Name</th>
+								<!-- 								<th>Serial No.</th> -->
+								<th>Free Memory</th>
+								<th>Make and Model</th>
+								<th>Temperature</th>
+								<th>Version</th>
+								<th>Group Name</th>
 							</tr>
 						</thead>
 						<tbody>

@@ -34,10 +34,13 @@
 	href="<%=request.getContextPath()%>/webtemplate/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/webtemplate/plugins/AdminPro/css/tree-viewer/tree-viewer.css">
+<link
+	href="<%=request.getContextPath()%>/webtemplate/visjs/vis-network.min.css"
+	rel="stylesheet" type="text/css" />
 </head>
 <style>
 .card-header {
-	background-color: dodgerblue;
+	background-color: #1e90ff1c;
 }
 
 .modal-header {
@@ -72,9 +75,24 @@
 	max-height: 250px;
 	max-width: 100%;
 }
+
+.chart-legend text {
+	fill: white !important;
+	color: white !important;
+}
+
+:root.dark-mode { -
+	-dark-color: #343a40; /* Change background color */ -
+	-dark-text-color: #ffffff; /* Change text color */
+}
+
+body.dark-mode {
+	background-color: var(- -dark-color);
+	color: var(- -dark-text-color);
+}
 </style>
 <body
-	class="hold-transition layout-top-nav layout-fixed layout-navbar-fixed layout-footer-fixed ">
+	class="hold-transition layout-top-nav layout-fixed layout-navbar-fixed layout-footer-fixed dark-mode">
 	<!-- class="hold-transition dark-mode layout-top-nav layout-fixed layout-navbar-fixed layout-footer-fixed">  -->
 	<div class="wrapper">
 
@@ -265,7 +283,61 @@
 
 					<!-- Main row -->
 				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header border-transparent">
+								<h3 class="card-title">Network Topology</h3>
 
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool"
+										data-card-widget="collapse">
+										<i class="fas fa-minus"></i>
+									</button>
+									<button type="button" class="btn btn-tool"
+										data-card-widget="remove">
+										<i class="fas fa-times"></i>
+									</button>
+								</div>
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
+								<div class="floating-box">
+									<div class="admin-panel clearfix">
+										<div id="mynetwork" style="width: 100%; height: 400px;"></div>
+									</div>
+								</div>
+							</div>
+							<!-- /.card-body -->
+
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header border-transparent">
+								<h3 class="card-title">Average Respose Time</h3>
+
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool"
+										data-card-widget="collapse">
+										<i class="fas fa-minus"></i>
+									</button>
+									<button type="button" class="btn btn-tool"
+										data-card-widget="remove">
+										<i class="fas fa-times"></i>
+									</button>
+								</div>
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
+								<div id="containerlinedemochart"></div>
+							</div>
+							<!-- /.card-body -->
+
+						</div>
+					</div>
+				</div>
 				<div class="row">
 					<!-- Left col -->
 
@@ -333,9 +405,8 @@
 									</button>
 								</div>
 							</div>
-							<div class="card-body">
-								<canvas id="devicepieChart"
-									style="min-height: 290px; height: 290px; max-height: 290px; max-width: 100%;"></canvas>
+							<div class="card-body" style="padding: 10% !important;">
+								<canvas id="devicepieChart"></canvas>
 							</div>
 							<!-- /.card-body -->
 						</div>
@@ -416,9 +487,8 @@
 									</button>
 								</div>
 							</div>
-							<div class="card-body">
-								<canvas id="linkpieChart"
-									style="min-height: 290px; height: 290px; max-height: 290px; max-width: 100%;"></canvas>
+							<div class="card-body" style="padding: 10% !important;">
+								<canvas id="linkpieChart"></canvas>
 							</div>
 							<!-- /.card-body -->
 						</div>
@@ -1010,21 +1080,26 @@
 
 	<!-- 	<script src="https://code.highcharts.com/highcharts.js"></script> -->
 
-	<script
-		src="<%=request.getContextPath()%>/webtemplate/OfflineJs/highcharts.js"></script>
+	<!-- 	<script -->
+	<%-- 		src="<%=request.getContextPath()%>/webtemplate/OfflineJs/highcharts.js"></script> --%>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
 
 	<!-- 	<script src="https://code.highcharts.com/modules/exporting.js"></script> -->
 	<script
 		src="<%=request.getContextPath()%>/webtemplate/OfflineJs/exporting.js"></script>
 	<!-- 	<script src="https://code.highcharts.com/modules/accessibility.js"></script> -->
 
+	<!-- 	<script -->
+	<%-- 		src="<%=request.getContextPath()%>/webtemplate/OfflineJs/accessibility.js"></script> --%>
+
+	<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+	<script src="<%=request.getContextPath()%>/webtemplate/visjs/vis.js"></script>
 	<script
-		src="<%=request.getContextPath()%>/webtemplate/OfflineJs/accessibility.js"></script>
-
-
+		src="<%=request.getContextPath()%>/webtemplate/OfflineJs/map.js"></script>
 	<!-- Page specific script -->
 	<script
-		src="<%=request.getContextPath()%>/custom_js/summaryDashboard.js"></script>
+		src="<%=request.getContextPath()%>/custom_js/summaryDashboarddark.js"></script>
 
 	<script>
 		// Device Count

@@ -51,7 +51,8 @@ public class DashboardController {
 	public String summaryDashboardPage(HttpServletRequest req, HttpServletResponse res) {
 		System.out.println("Controller Called summaryPage");
 
-		return "summary";
+//		return "summary";
+		return "summarydark";
 	}
 
 	@RequestMapping("/ScoreDashboard")

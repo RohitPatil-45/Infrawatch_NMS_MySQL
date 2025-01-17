@@ -4632,7 +4632,7 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 							+ "    COALESCE(add_node.GROUP_NAME, '') AS GROUP_NAME\r\n"
 							+ "FROM node_health_monitoring AS nodemon\r\n"
 							+ "JOIN add_node ON nodemon.NODE_IP = add_node.DEVICE_IP\r\n"
-							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND  nodemon.TEMPERATURE > 40  AND "
+							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND  nodemon.TEMPERATURE <= 40  AND "
 							+ userScopeData;
 
 				} else if (parameter.trim().equalsIgnoreCase("tempunhealthy")) {
@@ -4653,7 +4653,7 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 							+ "    COALESCE(add_node.GROUP_NAME, '') AS GROUP_NAME\r\n"
 							+ "FROM node_health_monitoring AS nodemon\r\n"
 							+ "JOIN add_node ON nodemon.NODE_IP = add_node.DEVICE_IP\r\n"
-							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND  nodemon.TEMPERATURE <= 40 AND "
+							+ "WHERE add_node.MONITORING_PARAM = 'Yes' AND  nodemon.TEMPERATURE > 40 AND "
 							+ userScopeData;
 
 				} else {
@@ -4699,7 +4699,7 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 					array.put("<span class='text-success'>" + row.get("CPU_STATUS") + "</span>");
 					array.put(row.get("CPU_UTILIZATION"));
 					array.put(row.get("NODE_NAME"));
-					array.put(row.get("SERIAL_NO"));
+//					array.put(row.get("SERIAL_NO"));
 					array.put(row.get("MAKE_AND_MODEL"));
 					array.put(row.get("VERSION"));
 					array.put(row.get("GROUP_NAME"));
@@ -4715,7 +4715,7 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 					array.put("<span class='text-danger'>" + row.get("CPU_STATUS") + "</span>");
 					array.put(row.get("CPU_UTILIZATION"));
 					array.put(row.get("NODE_NAME"));
-					array.put(row.get("SERIAL_NO"));
+//					array.put(row.get("SERIAL_NO"));
 					array.put(row.get("MAKE_AND_MODEL"));
 					array.put(row.get("VERSION"));
 					array.put(row.get("GROUP_NAME"));
@@ -4729,10 +4729,10 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 					array.put(srno);
 					array.put(row.get("NODE_IP"));
 					array.put(row.get("NODE_NAME"));
-					array.put(row.get("SERIAL_NO"));
+//					array.put(row.get("SERIAL_NO"));
 					array.put(row.get("FREE_MEMORY"));
 					array.put(row.get("MAKE_AND_MODEL"));
-					array.put(row.get("MEMORY_STATUS"));
+					array.put("<span class='text-success'>" + row.get("MEMORY_STATUS") + "</span>");
 					array.put(row.get("MEMORY_UTILIZATION"));
 					array.put(row.get("TOTAL_MEMORY"));
 					array.put(row.get("USED_MEMORY"));
@@ -4748,10 +4748,10 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 					array.put(srno);
 					array.put(row.get("NODE_IP"));
 					array.put(row.get("NODE_NAME"));
-					array.put(row.get("SERIAL_NO"));
+//					array.put(row.get("SERIAL_NO"));
 					array.put(row.get("FREE_MEMORY"));
 					array.put(row.get("MAKE_AND_MODEL"));
-					array.put(row.get("MEMORY_STATUS"));
+					array.put("<span class='text-danger'>" + row.get("MEMORY_STATUS") + "</span>");
 					array.put(row.get("MEMORY_UTILIZATION"));
 					array.put(row.get("TOTAL_MEMORY"));
 					array.put(row.get("USED_MEMORY"));
@@ -4767,12 +4767,10 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 					array.put(srno);
 					array.put(row.get("NODE_IP"));
 					array.put(row.get("NODE_NAME"));
-					array.put(row.get("SERIAL_NO"));
+//					array.put(row.get("SERIAL_NO"));
 					array.put(row.get("FREE_MEMORY"));
 					array.put(row.get("MAKE_AND_MODEL"));
-					array.put(row.get("TEMPERATURE"));
-					array.put(row.get("TOTAL_MEMORY"));
-					array.put(row.get("USED_MEMORY"));
+					array.put("<span class='text-success'>" + row.get("TEMPERATURE") + "</span>");
 					array.put(row.get("VERSION"));
 					array.put(row.get("GROUP_NAME"));
 
@@ -4785,12 +4783,10 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 					array.put(srno);
 					array.put(row.get("NODE_IP"));
 					array.put(row.get("NODE_NAME"));
-					array.put(row.get("SERIAL_NO"));
+//					array.put(row.get("SERIAL_NO"));
 					array.put(row.get("FREE_MEMORY"));
 					array.put(row.get("MAKE_AND_MODEL"));
-					array.put(row.get("TEMPERATURE"));
-					array.put(row.get("TOTAL_MEMORY"));
-					array.put(row.get("USED_MEMORY"));
+					array.put("<span class='text-danger'>" + row.get("TEMPERATURE") + "</span>");
 					array.put(row.get("VERSION"));
 					array.put(row.get("GROUP_NAME"));
 
@@ -4800,22 +4796,63 @@ public class DashboardDaoImpl extends AbstractDao<Integer, NodeMonitoringModel> 
 
 					srno++;
 					array = new JSONArray();
+
+					// Add Sr. No.
 					array.put(srno);
+
+					// Add Node IP
 					array.put(row.get("NODE_IP"));
+
+					// Add Node Name
 					array.put(row.get("NODE_NAME"));
-					array.put(row.get("SERIAL_NO"));
-					array.put(row.get("CPU_STATUS"));
+
+					// Check and insert CPU Status with conditional class
+					if ("High".equals(row.get("CPU_STATUS"))) {
+						array.put("<span class='text-danger'>" + row.get("CPU_STATUS") + "</span>");
+					} else {
+						array.put("<span class='text-success'>" + row.get("CPU_STATUS") + "</span>");
+					}
+
+					// Add CPU Utilization
 					array.put(row.get("CPU_UTILIZATION"));
+
+					// Check and insert Memory Status with conditional class
+					if ("High".equals(row.get("MEMORY_STATUS"))) {
+						array.put("<span class='text-danger'>" + row.get("MEMORY_STATUS") + "</span>");
+					} else {
+						array.put("<span class='text-success'>" + row.get("MEMORY_STATUS") + "</span>");
+					}
+
+					// Add Free Memory
 					array.put(row.get("FREE_MEMORY"));
+
+					// Add Make and Model
 					array.put(row.get("MAKE_AND_MODEL"));
-					array.put(row.get("MEMORY_STATUS"));
+
+					// Add Memory Utilization
 					array.put(row.get("MEMORY_UTILIZATION"));
-					array.put(row.get("TEMPERATURE"));
+
+					// Check and insert Temperature with conditional class
+					double temperature = Double.parseDouble(row.get("TEMPERATURE").toString());
+					if (temperature > 40) {
+						array.put("<span class='text-danger'>" + row.get("TEMPERATURE") + "</span>");
+					} else {
+						array.put("<span class='text-success'>" + row.get("TEMPERATURE") + "</span>");
+					}
+
+					// Add Total Memory
 					array.put(row.get("TOTAL_MEMORY"));
+
+					// Add Used Memory
 					array.put(row.get("USED_MEMORY"));
+
+					// Add Version
 					array.put(row.get("VERSION"));
+
+					// Add Group Name
 					array.put(row.get("GROUP_NAME"));
 
+					// Add the array to the main array
 					array1.put(array);
 
 				}

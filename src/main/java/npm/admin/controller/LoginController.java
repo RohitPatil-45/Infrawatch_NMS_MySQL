@@ -198,7 +198,8 @@ public class LoginController {
 	public String viewDLP(ModelMap model) {
 
 		// return "landingPage";
-		return "summary";
+//		return "summary";
+		return "summarydark";
 	}
 
 	@RequestMapping(value = { "/index" }, method = RequestMethod.GET)

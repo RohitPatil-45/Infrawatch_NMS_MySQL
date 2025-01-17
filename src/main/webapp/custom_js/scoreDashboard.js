@@ -506,7 +506,7 @@ function containerlinegraphtwo() {
 	Highcharts.chart('containerlinegraph002', {
 		chart : {
 			height : '70%', // Set height to 50% of the container
-			width : null
+			width : null,
 		// Fit the chart to the container's width
 		},
 		title : {
@@ -1385,6 +1385,38 @@ function performanceheathydatalist() {
 		dataType : 'json',
 		success : function(data) {
 			// alert(data);
+			$('#PerformanceinfoCPUtabledata').DataTable().destroy();
+			var table = $('#PerformanceinfoCPUtabledata').DataTable({
+				lengthChange : false,
+				autoWidth : false,
+				data : data,
+				"pageLength" : 5,
+				scrollX : true,
+			// scrollY : true,
+			// scrollY : '150px'
+			});
+
+			setTimeout(function() {
+				table.columns.adjust();
+			}, 1000);
+
+		}
+	});
+
+}
+
+function performanceunheathydatalist() {
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/PerformanceDataList";
+	$.ajax({
+		type : 'GET',
+		url : serviceUrl,
+		data : 'Parameter=' + "cpuunhealthy",
+		dataType : 'json',
+		success : function(data) {
+			// alert(data);
+			$('#PerformanceinfoCPUtabledata').DataTable().destroy();
 
 			var table = $('#PerformanceinfoCPUtabledata').DataTable({
 				lengthChange : false,
@@ -1392,10 +1424,161 @@ function performanceheathydatalist() {
 				data : data,
 				"pageLength" : 5,
 				scrollX : true,
-				scrollY : true,
-				scrollY : '150px'
+			// scrollY : true,
+			// scrollY : '150px'
 			});
+			setTimeout(function() {
+				table.columns.adjust();
+			}, 1000);
+		}
+	});
 
+}
+
+function performancealldatalist() {
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/PerformanceDataList";
+	$.ajax({
+		type : 'GET',
+		url : serviceUrl,
+		data : 'Parameter=' + "all",
+		dataType : 'json',
+		success : function(data) {
+			// alert(data);
+			$('#Performanceinfoalltabledata').DataTable().destroy();
+
+			var table = $('#Performanceinfoalltabledata').DataTable({
+				lengthChange : false,
+				autoWidth : false,
+				data : data,
+				"pageLength" : 5,
+				scrollX : true,
+			// scrollY : true,
+			// scrollY : '150px'
+			});
+			setTimeout(function() {
+				table.columns.adjust();
+			}, 1000);
+		}
+	});
+
+}
+
+function performanceMemoryheathydatalist() {
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/PerformanceDataList";
+	$.ajax({
+		type : 'GET',
+		url : serviceUrl,
+		data : 'Parameter=' + "memoryhealthy",
+		dataType : 'json',
+		success : function(data) {
+			// alert(data);
+			$('#Performanceinfomemorytabledata').DataTable().destroy();
+
+			var table = $('#Performanceinfomemorytabledata').DataTable({
+				lengthChange : false,
+				autoWidth : false,
+				data : data,
+				"pageLength" : 5,
+				scrollX : true,
+			// scrollY : true,
+			// scrollY : '150px'
+			});
+			setTimeout(function() {
+				table.columns.adjust();
+			}, 1000);
+		}
+	});
+}
+
+function performanceMemoryunheathydatalist() {
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/PerformanceDataList";
+	$.ajax({
+		type : 'GET',
+		url : serviceUrl,
+		data : 'Parameter=' + "memoryunhealthy",
+		dataType : 'json',
+		success : function(data) {
+			// alert(data);
+			$('#Performanceinfomemorytabledata').DataTable().destroy();
+
+			var table = $('#Performanceinfomemorytabledata').DataTable({
+				lengthChange : false,
+				autoWidth : false,
+				data : data,
+				"pageLength" : 5,
+				scrollX : true,
+			// scrollY : true,
+			// scrollY : '150px'
+			});
+			setTimeout(function() {
+				table.columns.adjust();
+			}, 1000);
+		}
+	});
+
+}
+
+function performancetemphealthydatalist() {
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/PerformanceDataList";
+	$.ajax({
+		type : 'GET',
+		url : serviceUrl,
+		data : 'Parameter=' + "temphealthy",
+		dataType : 'json',
+		success : function(data) {
+			// alert(data);
+			$('#Performanceinfotemptabledata').DataTable().destroy();
+
+			var table = $('#Performanceinfotemptabledata').DataTable({
+				lengthChange : false,
+				autoWidth : false,
+				data : data,
+				"pageLength" : 5,
+				scrollX : true,
+			// scrollY : true,
+			// scrollY : '150px'
+			});
+			setTimeout(function() {
+				table.columns.adjust();
+			}, 1000);
+		}
+	});
+
+}
+
+function performancetempunhealthydatalist() {
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/dashboard/PerformanceDataList";
+	$.ajax({
+		type : 'GET',
+		url : serviceUrl,
+		data : 'Parameter=' + "tempunhealthy",
+		dataType : 'json',
+		success : function(data) {
+			// alert(data);
+			$('#Performanceinfotemptabledata').DataTable().destroy();
+
+			var table = $('#Performanceinfotemptabledata').DataTable({
+				lengthChange : false,
+				autoWidth : false,
+				data : data,
+				"pageLength" : 5,
+				scrollX : true,
+			// scrollY : true,
+			// scrollY : '150px'
+			});
+			setTimeout(function() {
+				table.columns.adjust();
+			}, 1000);
 		}
 	});
 
