@@ -1749,4 +1749,42 @@ public class DashboardController {
 		return null;
 	}
 
+	
+	// WLC Details
+	@RequestMapping("/wlcDetails")
+	public String wlcDetails(Model m) {
+
+		JSONArray dataArray1 = service.collectTreeGroup();
+		List<Map<String, Object>> dataArray = new ArrayList<Map<String, Object>>();
+
+		for (int i = 0; i < dataArray1.length(); i++) {
+			Map<String, Object> dataMap = new HashMap<String, Object>();
+			JSONObject jsonObject = dataArray1.getJSONObject(i);
+			// Assuming you have getters in AgentInstalledDeviceBean
+			dataMap.put("group", jsonObject.get("groupName"));
+			dataMap.put("device", jsonObject.get("deviceName"));
+			dataMap.put("ipAddress", jsonObject.get("deviceIP"));
+			dataMap.put("deviceStatus", jsonObject.get("nodeStatus"));
+			dataArray.add(dataMap);
+		}
+		Set<String> uniqueGroups = new HashSet<String>();
+		List<Map<String, Object>> uniqueGroupsArray = new ArrayList<Map<String, Object>>();
+
+		for (Map<String, Object> data : dataArray) {
+			String group = (String) data.get("group");
+
+			// Check if the group is not already in the set
+			if (uniqueGroups.add(group)) {
+				// If it's a new group, add it to the unique list
+				Map<String, Object> uniqueData = new HashMap<String, Object>(data);
+				uniqueGroupsArray.add(uniqueData);
+			}
+		}
+
+		m.addAttribute("dataArray", dataArray);
+		m.addAttribute("uniqueGroup", uniqueGroupsArray);
+		return "WlcDetails";
+
+	}
+	
 }

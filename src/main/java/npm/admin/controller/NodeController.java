@@ -1067,5 +1067,31 @@ public class NodeController {
 		}
 		return null;
 	}
+	
+	@RequestMapping(value = "/bgpMonitoring")
+	public ModelAndView bgpMonitoring(HttpSession session, HttpServletRequest req) {
+		ModelAndView m = new ModelAndView();
+		m.setViewName("BgpMonitoring");
+		return m;
+	}
+	
+	@RequestMapping(value = "/bgpAlerts")
+	public ModelAndView bgpAlerts(HttpSession session, HttpServletRequest req) {
+		ModelAndView m = new ModelAndView();
+		m.setViewName("BgpAlerts");
+		return m;
+	}
+	
+	@RequestMapping(value = "/routesHistory")
+	public ModelAndView routesHistory(HttpSession session, HttpServletRequest req) {
+		ModelAndView m = new ModelAndView();
+		m.setViewName("RoutesHistory");
+		return m;
+	}
+	
+	@RequestMapping("/topBgpActivity")
+	public String topBgpActivity(HttpServletRequest req, HttpServletResponse res) {
+		return "TopBGPDashboard";
+	}
 
 }
