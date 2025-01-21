@@ -405,8 +405,9 @@ body.dark-mode {
 									</button>
 								</div>
 							</div>
-							<div class="card-body" style="padding: 10% !important;">
-								<canvas id="devicepieChart"></canvas>
+							<div class="card-body" style="">
+								<canvas id="devicepieChart"
+									style="min-height: 290px; height: 290px; max-height: 290px; max-width: 100%;"></canvas>
 							</div>
 							<!-- /.card-body -->
 						</div>
@@ -487,8 +488,9 @@ body.dark-mode {
 									</button>
 								</div>
 							</div>
-							<div class="card-body" style="padding: 10% !important;">
-								<canvas id="linkpieChart"></canvas>
+							<div class="card-body" style="">
+								<canvas id="linkpieChart"
+									style="min-height: 290px; height: 290px; max-height: 290px; max-width: 100%;"></canvas>
 							</div>
 							<!-- /.card-body -->
 						</div>
@@ -748,7 +750,7 @@ body.dark-mode {
 								<div id="centerContent"
 									style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
 									<img
-										src="<%=request.getContextPath()%>/webtemplate/dist/img/alarm.png"
+										src="<%=request.getContextPath()%>/webtemplate/dist/img/alarmdark.png"
 										alt="Bell Icon"
 										style="width: 40px; height: 40px; margin-top: -20px;">
 									<div id="alarmCount"

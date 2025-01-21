@@ -21,7 +21,7 @@ function logoutsaveonclick() {
 window.onload = function() {
 
 	allCount();
-	// setInterval(allCount, 20000);
+	setInterval(allCount, 20000);
 
 	// Node Composition
 
@@ -105,237 +105,9 @@ window.onload = function() {
 
 		}
 	});
-
+	
 	getnetworkdata();
 	getlinechartdatademo();
-}
-
-function getlinechartdatademo() {// Your data array
-	var data = [
-	    { "Timestamp" : "10:04 01/01/25", "Responsetime" : "5" },
-	    { "Timestamp" : "10:50 01/01/25", "Responsetime" : "6" },
-	    { "Timestamp" : "11:06 01/01/25", "Responsetime" : "6" },
-	    { "Timestamp" : "11:34 01/01/25", "Responsetime" : "10" },
-	    { "Timestamp" : "04:21 02/01/25", "Responsetime" : "15" },
-	    { "Timestamp" : "04:51 02/01/25", "Responsetime" : "15" },
-	    { "Timestamp" : "05:22 02/01/25", "Responsetime" : "14" },
-	    { "Timestamp" : "10:04 03/01/25", "Responsetime" : "5" },
-	    { "Timestamp" : "10:50 03/01/25", "Responsetime" : "6" },
-	    { "Timestamp" : "11:06 03/01/25", "Responsetime" : "6" },
-	    { "Timestamp" : "04:21 04/01/25", "Responsetime" : "15" },
-	    { "Timestamp" : "05:07 04/01/25", "Responsetime" : "15" },
-	    { "Timestamp" : "05:22 04/01/25", "Responsetime" : "14" },
-	    { "Timestamp" : "10:04 05/01/25", "Responsetime" : "7" },
-	    { "Timestamp" : "10:35 05/01/25", "Responsetime" : "9" },
-	    { "Timestamp" : "11:06 06/01/25", "Responsetime" : "7" },
-	    { "Timestamp" : "11:21 06/01/25", "Responsetime" : "6" },
-	    { "Timestamp" : "10:04 07/01/25", "Responsetime" : "6" },
-	    { "Timestamp" : "10:35 07/01/25", "Responsetime" : "6" },
-	    { "Timestamp" : "04:21 08/01/25", "Responsetime" : "5" },
-	    { "Timestamp" : "04:36 08/01/25", "Responsetime" : "5" },
-	    { "Timestamp" : "04:51 08/01/25", "Responsetime" : "6" }
-	];
-
-	// Convert data into Highcharts format (timestamp, responseTime)
-	const formattedData = data.map(item => {
-	    const timestamp = new Date(item.Timestamp.replace(/(\d{2}\/\d{2}\/\d{2})/, '20$1')); // Adjust
-																								// year
-																								// format
-																								// for
-																								// proper
-																								// parsing
-	    return [timestamp.getTime(), parseInt(item.Responsetime)]; // [timestamp,
-																	// responseTime]
-	});
-
-	Highcharts.chart('containerlinedemochart', {
-	    chart: {
-	        zooming: {
-	            type: 'x'
-	        },
-	        backgroundColor: null, // Set background color to null
-									// (transparent)
-	    },
-	    title: {
-	        text: 'Response Time Over Time',
-	        style: {
-	            color: '#ffffff' // Set title text color to white
-	        }
-	    },
-	    subtitle: {
-	        text: document.ontouchstart === undefined ?
-	            'Click and drag in the plot area to zoom in' :
-	            'Pinch the chart to zoom in',
-	        style: {
-	            color: '#ffffff' // Set subtitle text color to white
-	        }
-	    },
-	    xAxis: {
-	        type: 'datetime',
-	        gridLineColor: '#B0B0B0', // Set grid line color to light grey
-	        labels: {
-	            style: {
-	                color: '#ffffff' // Set x-axis labels color to white
-	            }
-	        }
-	    },
-	    yAxis: {
-	        title: {
-	            text: 'Response Time',
-	            style: {
-	                color: '#ffffff' // Set y-axis title text color to white
-	            }
-	        },
-	        gridLineColor: '#9191915e', // Set grid line color to light grey
-	        labels: {
-	            style: {
-	                color: '#ffffff' // Set y-axis labels color to white
-	            }
-	        }
-	    },
-	    legend: {
-	        enabled: false
-	    },
-	    plotOptions: {
-	        area: {
-	            marker: {
-	                radius: 2
-	            },
-	            lineWidth: 1,
-	            color: {
-	                linearGradient: {
-	                    x1: 0,
-	                    y1: 0,
-	                    x2: 0,
-	                    y2: 1
-	                },
-	                stops: [
-	                    [0, 'rgb(199, 113, 243)'],
-	                    [0.7, 'rgb(76, 175, 254)']
-	                ]
-	            },
-	            states: {
-	                hover: {
-	                    lineWidth: 1
-	                }
-	            },
-	            threshold: null
-	        }
-	    },
-	    series: [{
-	        type: 'area',
-	        name: 'Response Time',
-	        data: formattedData
-	    }]
-	});
-
-
-}
-
-function getnetworkdata() {
-
-	// alert("hi")
-	var l = window.location;
-	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
-	var serviceUrl = base_url + "/nodeDashboard/getAutoNetworkTopology";
-	//	
-	$
-			.ajax({
-				type : 'POST',
-				url : serviceUrl,
-				dataType : "JSON",
-				success : function(data) {
-					// alert("data")
-					console.log(data)
-					let Array = data;
-					var nodes = Array[0];
-					// alert(nodes)
-					var edges = Array[1];
-					console.log("nodes :" + JSON.stringify(nodes))
-					console.log("edges :" + JSON.stringify(edges))
-
-					function htmlTitle(html) {
-						const container = document.createElement("div");
-						container.innerHTML = html;
-						return container;
-					}
-
-					var color = "black";
-					// var DIR = "../img/indonesia/";
-					var DIR = "/NPMWebConsoleV2/webtemplate/visjs/img/routerDown.png";
-					// create a network
-					var container = document.getElementById("mynetwork");
-					var data = {
-						nodes : nodes,
-						edges : edges,
-					};
-					var options = {
-						nodes : {
-							shape : "box",
-							chosen : false,
-							shadow : true,
-							borderWidth : 2,
-
-						},
-						edges : {
-							width : 2,
-							shadow : true,
-							smooth : true
-						},
-
-						layout : {
-							hierarchical : {
-								direction : "UD",
-								sortMethod : "directed",
-							},
-						},
-						physics : {
-							hierarchicalRepulsion : {
-								// avoidOverlap : 3,
-								springConstant : 0.001,
-							},
-
-							minVelocity : 1
-						}
-					};
-					network = new vis.Network(container, data, options);
-
-					network
-							.on(
-									"showPopup",
-									function(params) {
-										// alert("showPopup params :"+params)
-										document
-												.getElementById("eventSpanHeading").innerHTML = "showPopup event: ";
-										document
-												.getElementById("eventSpanContent").innerHTML = JSON
-												.stringify(params, null, 4);
-									});
-
-					network.on("hidePopup", function() {
-						console.log("hidePopup Event");
-					});
-
-					network
-							.on(
-									"doubleClick",
-									function(params) {
-										// alert("doubleClick :"+params)
-										console.log(params);
-										params.event = "[original event]";
-										document
-												.getElementById("eventSpanContent").innerHTML = JSON
-												.stringify(params, null, 4);
-										return false;
-									});
-
-					network.on("stabilizationIterationsDone", function() {
-						network.setOptions({
-							physics : false
-						});
-					});
-				}
-			})
 }
 
 // Get Node Details on Model
@@ -1502,42 +1274,16 @@ function deviceUpDownCount() {
 					var devicepieOptions = {
 						maintainAspectRatio : false,
 						responsive : true,
-						plugins : {
-							legend : {
-								labels : {
-									color : 'white', // Legend text color
-								}
-							},
-							tooltip : {
-								callbacks : {
-									labelTextColor : function(context) {
-										return 'white'; // Tooltip text color
-									}
-								}
-							}
-						},
-						rotation : Math.PI, // Start angle (180 degrees, to
-						// begin at the bottom)
-						circumference : Math.PI, // Display only half of the
-						// chart (180 degrees)
-						cutoutPercentage : 50, // This creates the donut shape
-					// (adjust as needed)
-
-					// Resize chart (increase to make it smaller)
-					};
+					}
 
 					// Create pie or douhnut chart
 					// You can switch between pie and douhnut using the method
 					// below.
 					devicechart = new Chart(devicepieChartCanvas, {
-						type : 'doughnut',
+						type : 'pie',
 						data : devicepieData,
-						options : devicepieOptions,
-
+						options : devicepieOptions
 					})
-
-					devicechart.width = 180;
-					devicechart.height = 180;
 
 				}
 
@@ -1600,39 +1346,15 @@ function interfaceUpDownCount() {
 					var linkpieOptions = {
 						maintainAspectRatio : false,
 						responsive : true,
-						plugins : {
-							legend : {
-								labels : {
-									color : 'white', // Legend text color
-								}
-							},
-							tooltip : {
-								callbacks : {
-									labelTextColor : function(context) {
-										return 'white'; // Tooltip text color
-									}
-								}
-							}
-						},
-						rotation : Math.PI, // Start angle (180 degrees, to
-						// begin at the bottom)
-						circumference : Math.PI, // Display only half of the
-						// chart (180 degrees)
-						cutoutPercentage : 50, // This creates the donut shape
-					// (adjust as needed)
-
-					// Resize chart (increase to make it smaller)
-					};
+					}
 					// Create pie or douhnut chart
 					// You can switch between pie and douhnut using the method
 					// below.
-					var linkpiechart1 = new Chart(linkpieChartCanvas, {
-						type : 'doughnut',
+					linkpie = new Chart(linkpieChartCanvas, {
+						type : 'pie',
 						data : linkpieData,
 						options : linkpieOptions
-					});
-					linkpiechart1.width = 180;
-					linkpiechart1.height = 180;
+					})
 				}
 			});
 
@@ -1766,3 +1488,233 @@ function deviceTypeSummary() {
 		}
 	});
 }
+
+
+
+function getnetworkdata() {
+
+	// alert("hi")
+	var l = window.location;
+	var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+	var serviceUrl = base_url + "/nodeDashboard/getAutoNetworkTopology";
+	//	
+	$
+			.ajax({
+				type : 'POST',
+				url : serviceUrl,
+				dataType : "JSON",
+				success : function(data) {
+					// alert("data")
+					console.log(data)
+					let Array = data;
+					var nodes = Array[0];
+					// alert(nodes)
+					var edges = Array[1];
+					console.log("nodes :" + JSON.stringify(nodes))
+					console.log("edges :" + JSON.stringify(edges))
+
+					function htmlTitle(html) {
+						const container = document.createElement("div");
+						container.innerHTML = html;
+						return container;
+					}
+
+					var color = "black";
+					// var DIR = "../img/indonesia/";
+					var DIR = "/NPMWebConsoleV2/webtemplate/visjs/img/routerDown.png";
+					// create a network
+					var container = document.getElementById("mynetwork");
+					var data = {
+						nodes : nodes,
+						edges : edges,
+					};
+					var options = {
+						nodes : {
+							shape : "box",
+							chosen : false,
+							shadow : true,
+							borderWidth : 2,
+
+						},
+						edges : {
+							width : 2,
+							shadow : true,
+							smooth : true
+						},
+
+						layout : {
+							hierarchical : {
+								direction : "UD",
+								sortMethod : "directed",
+							},
+						},
+						physics : {
+							hierarchicalRepulsion : {
+								// avoidOverlap : 3,
+								springConstant : 0.001,
+							},
+
+							minVelocity : 1
+						}
+					};
+					network = new vis.Network(container, data, options);
+
+					network
+							.on(
+									"showPopup",
+									function(params) {
+										// alert("showPopup params :"+params)
+										document
+												.getElementById("eventSpanHeading").innerHTML = "showPopup event: ";
+										document
+												.getElementById("eventSpanContent").innerHTML = JSON
+												.stringify(params, null, 4);
+									});
+
+					network.on("hidePopup", function() {
+						console.log("hidePopup Event");
+					});
+
+					network
+							.on(
+									"doubleClick",
+									function(params) {
+										// alert("doubleClick :"+params)
+										console.log(params);
+										params.event = "[original event]";
+										document
+												.getElementById("eventSpanContent").innerHTML = JSON
+												.stringify(params, null, 4);
+										return false;
+									});
+
+					network.on("stabilizationIterationsDone", function() {
+						network.setOptions({
+							physics : false
+						});
+					});
+				}
+			})
+}
+
+function getlinechartdatademo() {// Your data array
+	var data = [
+	    { "Timestamp" : "10:04 01/01/25", "Responsetime" : "5" },
+	    { "Timestamp" : "10:50 01/01/25", "Responsetime" : "6" },
+	    { "Timestamp" : "11:06 01/01/25", "Responsetime" : "6" },
+	    { "Timestamp" : "11:34 01/01/25", "Responsetime" : "10" },
+	    { "Timestamp" : "04:21 02/01/25", "Responsetime" : "15" },
+	    { "Timestamp" : "04:51 02/01/25", "Responsetime" : "15" },
+	    { "Timestamp" : "05:22 02/01/25", "Responsetime" : "14" },
+	    { "Timestamp" : "10:04 03/01/25", "Responsetime" : "5" },
+	    { "Timestamp" : "10:50 03/01/25", "Responsetime" : "6" },
+	    { "Timestamp" : "11:06 03/01/25", "Responsetime" : "6" },
+	    { "Timestamp" : "04:21 04/01/25", "Responsetime" : "15" },
+	    { "Timestamp" : "05:07 04/01/25", "Responsetime" : "15" },
+	    { "Timestamp" : "05:22 04/01/25", "Responsetime" : "14" },
+	    { "Timestamp" : "10:04 05/01/25", "Responsetime" : "7" },
+	    { "Timestamp" : "10:35 05/01/25", "Responsetime" : "9" },
+	    { "Timestamp" : "11:06 06/01/25", "Responsetime" : "7" },
+	    { "Timestamp" : "11:21 06/01/25", "Responsetime" : "6" },
+	    { "Timestamp" : "10:04 07/01/25", "Responsetime" : "6" },
+	    { "Timestamp" : "10:35 07/01/25", "Responsetime" : "6" },
+	    { "Timestamp" : "04:21 08/01/25", "Responsetime" : "5" },
+	    { "Timestamp" : "04:36 08/01/25", "Responsetime" : "5" },
+	    { "Timestamp" : "04:51 08/01/25", "Responsetime" : "6" }
+	];
+
+	// Convert data into Highcharts format (timestamp, responseTime)
+	const formattedData = data.map(item => {
+	    const timestamp = new Date(item.Timestamp.replace(/(\d{2}\/\d{2}\/\d{2})/, '20$1')); // Adjust
+																								// year
+																								// format
+																								// for
+																								// proper
+																								// parsing
+	    return [timestamp.getTime(), parseInt(item.Responsetime)]; // [timestamp,
+																	// responseTime]
+	});
+
+	Highcharts.chart('containerlinedemochart', {
+	    chart: {
+	        zooming: {
+	            type: 'x'
+	        },
+	        backgroundColor: null, // Set background color to null
+									// (transparent)
+	    },
+	    title: {
+	        text: 'Response Time Over Time',
+	        style: {
+	            color: '#ffffff' // Set title text color to white
+	        }
+	    },
+	    subtitle: {
+	        text: document.ontouchstart === undefined ?
+	            'Click and drag in the plot area to zoom in' :
+	            'Pinch the chart to zoom in',
+	        style: {
+	            color: '#ffffff' // Set subtitle text color to white
+	        }
+	    },
+	    xAxis: {
+	        type: 'datetime',
+	        gridLineColor: '#B0B0B0', // Set grid line color to light grey
+	        labels: {
+	            style: {
+	                color: '#ffffff' // Set x-axis labels color to white
+	            }
+	        }
+	    },
+	    yAxis: {
+	        title: {
+	            text: 'Response Time',
+	            style: {
+	                color: '#ffffff' // Set y-axis title text color to white
+	            }
+	        },
+	        gridLineColor: '#9191915e', // Set grid line color to light grey
+	        labels: {
+	            style: {
+	                color: '#ffffff' // Set y-axis labels color to white
+	            }
+	        }
+	    },
+	    legend: {
+	        enabled: false
+	    },
+	    plotOptions: {
+	        area: {
+	            marker: {
+	                radius: 2
+	            },
+	            lineWidth: 1,
+	            color: {
+	                linearGradient: {
+	                    x1: 0,
+	                    y1: 0,
+	                    x2: 0,
+	                    y2: 1
+	                },
+	                stops: [
+	                    [0, 'rgb(199, 113, 243)'],
+	                    [0.7, 'rgb(76, 175, 254)']
+	                ]
+	            },
+	            states: {
+	                hover: {
+	                    lineWidth: 1
+	                }
+	            },
+	            threshold: null
+	        }
+	    },
+	    series: [{
+	        type: 'area',
+	        name: 'Response Time',
+	        data: formattedData
+	    }]
+	});
+
+
+}	
